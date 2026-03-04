@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M10 20 Q 50 10 90 20 L 90 80 Q 50 70 10 80 Z" fill="#2c3e50" />
+  
+  <path d="M15 25 Q 50 15 50 25 L 50 75 Q 50 65 15 75 Z" fill="#ecf0f1" />
+  
+  <path d="M50 25 Q 50 15 85 25 L 85 75 Q 50 65 50 75 Z" fill="#ffffff" />
+  
+  <line x1="20" y1="35" x2="40" y2="30" stroke="#bdc3c7" stroke-width="2" />
+  <line x1="20" y1="45" x2="40" y2="40" stroke="#bdc3c7" stroke-width="2" />
+  <line x1="60" y1="30" x2="80" y2="35" stroke="#bdc3c7" stroke-width="2" />
+  <line x1="60" y1="40" x2="80" y2="45" stroke="#bdc3c7" stroke-width="2" />
+  
+  <path d="M30 55 V 70 M 25 60 H 35" stroke="#e67e22" stroke-width="3" fill="none" />
+</svg>

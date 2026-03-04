@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+
+</head>
+
+
+
+
+<body>
+    <button id="back">
+back
+    </button>
+    <button id="test">press here</button>
+    <div id="app">
+</div>
+<script type="module"> class htmlContentHandling {
+   
+    constructor(htmlScenesArray, idOfDivToDisplay, warp=true){
+        this.warp = warp;
+        this.Display = document.getElementById(idOfDivToDisplay);   
+        this.htmlToDisplay = htmlScenesArray;
+        this.currenthtmlDisplay = [];
+        this.currentSceneIndex = 0;
+        this.prev = 0
+        this.scenes;
+    }
+    init(){
+        console.log(this.htmlToDisplay[this.currentSceneIndex])
+        this.Display.innerHTML = this.htmlToDisplay[this.currentSceneIndex];
+        this.currentSceneIndex = 0; // Reset currentSceneIndex to 0 on init
+    }
+    displayHTMLScene(sceneName) {
+        const scene = this.htmlToDisplay.find(scene => scene.name === sceneName);
+        if (scene) {
+            return scene.content;
+        } else {
+            console.error(`Scene "${sceneName}" not found.`);
+            return null;
+        }
+    }
+    nextScene(){
+        // logic to go to next scene
+        this.currenthtmlDisplay.push(this.htmlToDisplay[this.currentSceneIndex]);
+        this.currentSceneIndex++;
+        if(this.currentSceneIndex >= this.htmlToDisplay.length){
+           if(this.warp) {this.currentSceneIndex = 0; }else {return;}
+        }
+        this.Display.innerHTML =  this.htmlToDisplay[this.currentSceneIndex];
+        
+    }
+    back(){
+        if(this.currentSceneIndex === 0) {
+            this.currentSceneIndex = 1;
+        }
+        // logic to go to previous scene
+        this.currenthtmlDisplay.push(this.htmlToDisplay[this.currentSceneIndex]);
+        this.currentSceneIndex--;
+        this.Display.innerHTML =  this.htmlToDisplay[this.currentSceneIndex];
+    }
+prevoiusScene(){
+    //this.Display.innerHTML = this.currenthtmlDisplay[];
+    //this.prev--
+    console.log(this.currenthtmlDisplay)
+        // logic to go to previous scene
+        //this.currenthtmlDisplay.push(this.displayHTMLScene(this.htmlToDisplay[this.currentSceneIndex]));
+        ///this.currentSceneIndex--;
+        //this.Display.innerHTML =  this.currenthtmlDisplay[this.currentSceneIndex];
+    }
+    set scenes (arrayOfScenes){
+        if(typeof arrayOfScenes !== 'array') {console.error('scenes must be an array'); return;}
+        this.htmlToDisplay = arrayOfScenes;
+    }
+ }
+  const mod = new htmlContentHandling(['<div >hello <button id=""> press here </button> </div>','<div>world</div>', '<div>!!!</div>'], 'app', false);
+const backB = document.getElementById('back')
+const testBtn = document.getElementById('test')
+mod.init()
+testBtn.addEventListener('click', ()=>{
+    mod.nextScene();
+})
+backB.addEventListener('click',()=>{
+    mod.back()
+})
+mod.scenes = ['<div>new scene 1</div>', '<div>new scene 2</div>']; // Adding new scenes
+
+export {htmlContentHandling}
+</script>
+
+<h2 class="extra_text">Matthew 1–3 <small class="audio extra_text">(<a class="mp3link" href="https://audio.esv.org/david-cochran-heath/mq/40001001-40003017.mp3" title="Matthew 1–3" type="audio/mpeg">Listen</a>)</small></h2>
+<h3 id="p40001001_01-1">The Genealogy of Jesus Christ</h3>
+<p id="p40001001_06-1" class="starts-chapter"><b class="chapter-num" id="v40001001-1">1:1&nbsp;</b>The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.</p>
+<p id="p40001001_06-1"><b class="verse-num" id="v40001002-1">2&nbsp;</b>Abraham was the father of Isaac, and Isaac the father of Jacob, and Jacob the father of Judah and his brothers, <b class="verse-num" id="v40001003-1">3&nbsp;</b>and Judah the father of Perez and Zerah by Tamar, and Perez the father of Hezron, and Hezron the father of Ram, <b class="verse-num" id="v40001004-1">4&nbsp;</b>and Ram the father of Amminadab, and Amminadab the father of Nahshon, and Nahshon the father of Salmon, <b class="verse-num" id="v40001005-1">5&nbsp;</b>and Salmon the father of Boaz by Rahab, and Boaz the father of Obed by Ruth, and Obed the father of Jesse, <b class="verse-num" id="v40001006-1">6&nbsp;</b>and Jesse the father of David the king.</p>
+<p id="p40001006_06-1">And David was the father of Solomon by the wife of Uriah, <b class="verse-num" id="v40001007-1">7&nbsp;</b>and Solomon the father of Rehoboam, and Rehoboam the father of Abijah, and Abijah the father of Asaph, <b class="verse-num" id="v40001008-1">8&nbsp;</b>and Asaph the father of Jehoshaphat, and Jehoshaphat the father of Joram, and Joram the father of Uzziah, <b class="verse-num" id="v40001009-1">9&nbsp;</b>and Uzziah the father of Jotham, and Jotham the father of Ahaz, and Ahaz the father of Hezekiah, <b class="verse-num" id="v40001010-1">10&nbsp;</b>and Hezekiah the father of Manasseh, and Manasseh the father of Amos, and Amos the father of Josiah, <b class="verse-num" id="v40001011-1">11&nbsp;</b>and Josiah the father of Jechoniah and his brothers, at the time of the deportation to Babylon.</p>
+<p id="p40001011_06-1"><b class="verse-num" id="v40001012-1">12&nbsp;</b>And after the deportation to Babylon: Jechoniah was the father of Shealtiel, and Shealtiel the father of Zerubbabel, <b class="verse-num" id="v40001013-1">13&nbsp;</b>and Zerubbabel the father of Abiud, and Abiud the father of Eliakim, and Eliakim the father of Azor, <b class="verse-num" id="v40001014-1">14&nbsp;</b>and Azor the father of Zadok, and Zadok the father of Achim, and Achim the father of Eliud, <b class="verse-num" id="v40001015-1">15&nbsp;</b>and Eliud the father of Eleazar, and Eleazar the father of Matthan, and Matthan the father of Jacob, <b class="verse-num" id="v40001016-1">16&nbsp;</b>and Jacob the father of Joseph the husband of Mary, of whom Jesus was born, who is called Christ.</p>
+<p id="p40001016_06-1"><b class="verse-num" id="v40001017-1">17&nbsp;</b>So all the generations from Abraham to David were fourteen generations, and from David to the deportation to Babylon fourteen generations, and from the deportation to Babylon to the Christ fourteen generations.</p>
+<h3 id="p40001017_06-1">The Birth of Jesus Christ</h3>
+<p id="p40001017_11-1"><b class="verse-num" id="v40001018-1">18&nbsp;</b>Now the birth of Jesus Christ took place in this way. When his mother Mary had been betrothed to Joseph, before they came together she was found to be with child from the Holy Spirit. <b class="verse-num" id="v40001019-1">19&nbsp;</b>And her husband Joseph, being a just man and unwilling to put her to shame, resolved to divorce her quietly. <b class="verse-num" id="v40001020-1">20&nbsp;</b>But as he considered these things, behold, an angel of the Lord appeared to him in a dream, saying, “Joseph, son of David, do not fear to take Mary as your wife, for that which is conceived in her is from the Holy Spirit. <b class="verse-num" id="v40001021-1">21&nbsp;</b>She will bear a son, and you shall call his name Jesus, for he will save his people from their sins.” <b class="verse-num" id="v40001022-1">22&nbsp;</b>All this took place to fulfill what the Lord had spoken by the prophet:</p>
+<p class="block-indent"><span class="begin-line-group"></span>
+<span id="p40001023_11-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;"><b class="verse-num inline" id="v40001023-1">23&nbsp;</b>&nbsp;&nbsp;“Behold, the virgin shall conceive and bear a son,</span><br /><span id="p40001023_11-1" class="indent line" style="margin: 0;text-indent: -3.5em;clear:both;padding-left:2em;display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;and they shall call his name Immanuel”</span><br /><span class="end-line-group"></span>
+</p><p id="p40001023_11-1" class="same-paragraph">(which means, God with us). <b class="verse-num" id="v40001024-1">24&nbsp;</b>When Joseph woke from sleep, he did as the angel of the Lord commanded him: he took his wife, <b class="verse-num" id="v40001025-1">25&nbsp;</b>but knew her not until she had given birth to a son. And he called his name Jesus.</p>
+<h3 id="p40002001_11-1">The Visit of the Wise Men</h3>
+<p id="p40002001_17-1" class="starts-chapter"><b class="chapter-num" id="v40002001-1">2:1&nbsp;</b>Now after Jesus was born in Bethlehem of Judea in the days of Herod the king, behold, wise men from the east came to Jerusalem, <b class="verse-num" id="v40002002-1">2&nbsp;</b>saying, “Where is he who has been born king of the Jews? For we saw his star when it rose and have come to worship him.” <b class="verse-num" id="v40002003-1">3&nbsp;</b>When Herod the king heard this, he was troubled, and all Jerusalem with him; <b class="verse-num" id="v40002004-1">4&nbsp;</b>and assembling all the chief priests and scribes of the people, he inquired of them where the Christ was to be born. <b class="verse-num" id="v40002005-1">5&nbsp;</b>They told him, “In Bethlehem of Judea, for so it is written by the prophet:</p>
+<p class="block-indent"><span class="begin-line-group"></span>
+<span id="p40002006_17-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;"><b class="verse-num inline" id="v40002006-1">6&nbsp;</b>&nbsp;&nbsp;“‘And you, O Bethlehem, in the land of Judah,</span><br /><span id="p40002006_17-1" class="indent line" style="margin: 0;text-indent: -3.5em;clear:both;padding-left:2em;display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;are by no means least among the rulers of Judah;</span><br /><span id="p40002006_17-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;">&nbsp;&nbsp;for from you shall come a ruler</span><br /><span id="p40002006_17-1" class="indent line" style="margin: 0;text-indent: -3.5em;clear:both;padding-left:2em;display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;who will shepherd my people Israel.’”</span><br /><span class="end-line-group"></span>
+</p><p id="p40002006_17-1"><b class="verse-num" id="v40002007-1">7&nbsp;</b>Then Herod summoned the wise men secretly and ascertained from them what time the star had appeared. <b class="verse-num" id="v40002008-1">8&nbsp;</b>And he sent them to Bethlehem, saying, “Go and search diligently for the child, and when you have found him, bring me word, that I too may come and worship him.” <b class="verse-num" id="v40002009-1">9&nbsp;</b>After listening to the king, they went on their way. And behold, the star that they had seen when it rose went before them until it came to rest over the place where the child was. <b class="verse-num" id="v40002010-1">10&nbsp;</b>When they saw the star, they rejoiced exceedingly with great joy. <b class="verse-num" id="v40002011-1">11&nbsp;</b>And going into the house, they saw the child with Mary his mother, and they fell down and worshiped him. Then, opening their treasures, they offered him gifts, gold and frankincense and myrrh. <b class="verse-num" id="v40002012-1">12&nbsp;</b>And being warned in a dream not to return to Herod, they departed to their own country by another way.</p>
+<h3 id="p40002012_17-1">The Flight to Egypt</h3>
+<p id="p40002012_21-1"><b class="verse-num" id="v40002013-1">13&nbsp;</b>Now when they had departed, behold, an angel of the Lord appeared to Joseph in a dream and said, “Rise, take the child and his mother, and flee to Egypt, and remain there until I tell you, for Herod is about to search for the child, to destroy him.” <b class="verse-num" id="v40002014-1">14&nbsp;</b>And he rose and took the child and his mother by night and departed to Egypt <b class="verse-num" id="v40002015-1">15&nbsp;</b>and remained there until the death of Herod. This was to fulfill what the Lord had spoken by the prophet, “Out of Egypt I called my son.”</p>
+<h3 id="p40002015_21-1">Herod Kills the Children</h3>
+<p id="p40002015_25-1"><b class="verse-num" id="v40002016-1">16&nbsp;</b>Then Herod, when he saw that he had been tricked by the wise men, became furious, and he sent and killed all the male children in Bethlehem and in all that region who were two years old or under, according to the time that he had ascertained from the wise men. <b class="verse-num" id="v40002017-1">17&nbsp;</b>Then was fulfilled what was spoken by the prophet Jeremiah:</p>
+<p class="block-indent"><span class="begin-line-group"></span>
+<span id="p40002018_25-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;"><b class="verse-num inline" id="v40002018-1">18&nbsp;</b>&nbsp;&nbsp;“A voice was heard in Ramah,</span><br /><span id="p40002018_25-1" class="indent line" style="margin: 0;text-indent: -3.5em;clear:both;padding-left:2em;display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;weeping and loud lamentation,</span><br /><span id="p40002018_25-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;">&nbsp;&nbsp;Rachel weeping for her children;</span><br /><span id="p40002018_25-1" class="indent line" style="margin: 0;text-indent: -3.5em;clear:both;padding-left:2em;display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;she refused to be comforted, because they are no more.”</span><br /><span class="end-line-group"></span>
+</p><h3 id="p40002018_25-1">The Return to Nazareth</h3>
+<p id="p40002018_29-1"><b class="verse-num" id="v40002019-1">19&nbsp;</b>But when Herod died, behold, an angel of the Lord appeared in a dream to Joseph in Egypt, <b class="verse-num" id="v40002020-1">20&nbsp;</b>saying, “Rise, take the child and his mother and go to the land of Israel, for those who sought the child’s life are dead.” <b class="verse-num" id="v40002021-1">21&nbsp;</b>And he rose and took the child and his mother and went to the land of Israel. <b class="verse-num" id="v40002022-1">22&nbsp;</b>But when he heard that Archelaus was reigning over Judea in place of his father Herod, he was afraid to go there, and being warned in a dream he withdrew to the district of Galilee. <b class="verse-num" id="v40002023-1">23&nbsp;</b>And he went and lived in a city called Nazareth, so that what was spoken by the prophets might be fulfilled, that he would be called a Nazarene.</p>
+<h3 id="p40003001_29-1">John the Baptist Prepares the Way</h3>
+<p id="p40003001_35-1" class="starts-chapter"><b class="chapter-num" id="v40003001-1">3:1&nbsp;</b>In those days John the Baptist came preaching in the wilderness of Judea, <b class="verse-num" id="v40003002-1">2&nbsp;</b>“Repent, for the kingdom of heaven is at hand.” <b class="verse-num" id="v40003003-1">3&nbsp;</b>For this is he who was spoken of by the prophet Isaiah when he said,</p>
+<p class="block-indent"><span class="begin-line-group"></span>
+<span id="p40003003_35-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;">&nbsp;&nbsp;“The voice of one crying in the wilderness:</span><br /><span id="p40003003_35-1" class="line" style="margin: 0;text-indent: -3.5em;padding-left: 5.5em;clear:both;">&nbsp;&nbsp;‘Prepare the way of the Lord;</span><br /><span id="p40003003_35-1" class="indent line" style="margin: 0;text-indent: -3.5em;clear:both;padding-left:2em;display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;make his paths straight.’”</span><br /><span class="end-line-group"></span>
+</p><p id="p40003003_35-1" class="same-paragraph"><b class="verse-num" id="v40003004-1">4&nbsp;</b>Now John wore a garment of camel’s hair and a leather belt around his waist, and his food was locusts and wild honey. <b class="verse-num" id="v40003005-1">5&nbsp;</b>Then Jerusalem and all Judea and all the region about the Jordan were going out to him, <b class="verse-num" id="v40003006-1">6&nbsp;</b>and they were baptized by him in the river Jordan, confessing their sins.</p>
+<p id="p40003006_35-1"><b class="verse-num" id="v40003007-1">7&nbsp;</b>But when he saw many of the Pharisees and Sadducees coming to his baptism, he said to them, “You brood of vipers! Who warned you to flee from the wrath to come? <b class="verse-num" id="v40003008-1">8&nbsp;</b>Bear fruit in keeping with repentance. <b class="verse-num" id="v40003009-1">9&nbsp;</b>And do not presume to say to yourselves, ‘We have Abraham as our father,’ for I tell you, God is able from these stones to raise up children for Abraham. <b class="verse-num" id="v40003010-1">10&nbsp;</b>Even now the axe is laid to the root of the trees. Every tree therefore that does not bear good fruit is cut down and thrown into the fire.</p>
+<p id="p40003010_35-1"><b class="verse-num" id="v40003011-1">11&nbsp;</b>“I baptize you with water for repentance, but he who is coming after me is mightier than I, whose sandals I am not worthy to carry. He will baptize you with the Holy Spirit and fire. <b class="verse-num" id="v40003012-1">12&nbsp;</b>His winnowing fork is in his hand, and he will clear his threshing floor and gather his wheat into the barn, but the chaff he will burn with unquenchable fire.”</p>
+   <!---sel-->
+   <div class="option-section">
+    <h3 class="section-title">Trigger Words</h3>
+    <div class="radio-group">
+        <label class="radio-label">
+            <input type="radio" id="highlight"name="verseSelectionH" value="highlight" checked>
+            <span class="radio-custom"></span>
+            Highlight
+        </label>
+        <label class="radio-label">
+            <input type="radio"id="ingore" name="verseSelectionH" value="ingore">
+            <span class="radio-custom"></span>
+            Ingore
+        </label>
+        <label class="radio-label">
+            <input type="radio" id="stop" name="verseSelectionH" value="stop" >
+            <span class="radio-custom"></span>
+            Stop at Word
+        </label>
+    </div>
+</div>
+  <!---sel-->
+  <div class="option-section">
+    <h3 class="section-title">Length of Timer (Length of zero will be no timer)</h3>
+    <input type="number" id="secs" name="numQuestions" value="30" min="0" max="1000" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+</div>
+<!---sel-->
+<div class="option-section">
+    <h3 class="section-title">Speed of Text (In milliseconds)</h3>
+    <div class="range-display-container">
+        <!-- This is your existing range input. -->
+        <input type="range" id="speed" name="numQuestions" value="0" min="0" max="2000">
+        <!-- Add a new span element to display the current value. -->
+        <span id="speedValue">0</span>
+    </div>
+</div>
+
+p id="p40003012_39-1"><b class="verse-num" id="v40003013-1">13&nbsp;</b>Then Jesus came from Galilee to the Jordan to John, to be baptized by him. <b class="verse-num" id="v40003014-1">14&nbsp;</b>John would have prevented him, saying, “I need to be baptized by you, and do you come to me?” <b class="verse-num" id="v40003015-1">15&nbsp;</b>But Jesus answered him, <span class="woc">“Let it be so now, for thus it is fitting for us to fulfill all righteousness.”</span> Then he consented. <b class="verse-num" id="v40003016-1">16&nbsp;</b>And when Jesus was baptized, immediately he went up from the water, and behold, the heavens were opened to him, and he saw the Spirit of God descending like a dove and coming to rest on him; <b class="verse-num" id="v40003017-1">17&nbsp;</b>and behold, a voice from heaven said, “This is my beloved Son, with whom I am well pleased.”</p>
+</body>
+
+</html><iframe src="https://www.esv.org/audio-player/Matthew+1.9/" style="border: 0; width: 100%; height: 109px;"></iframe> 

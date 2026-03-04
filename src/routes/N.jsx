@@ -1,0 +1,1 @@
+export const N =' this is where life  comes to life';

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Quizzing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body >
+    <noscript>
+        <iframe
+            src="noscript_fallback.html"
+            title="Fallback content when JavaScript is disabled"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            loading="lazy"
+            sandbox="allow-same-origin allow-popups allow-scripts allow-forms"
+        >
+            Your browser does not support iframes, please visit the simplified version: <a href="noscript_fallback.html">Simplified Content</a>
+        </iframe>
+    </noscript>
+    <dialog class="modal" id="settings"> 
+        <div class="modal-content overflow-set-modal" id="modaldiv">
+            <h3 id="modalh3">Settings</h3>
+           <!-- <div class="option-section">
+                        <h3 class="section-title">Length of Timer (Length of zero will be no timer)</h3>
+                        <input type="number" id="secs" name="numQuestions" value="30" min="0" max="1000" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                    </div>
+                    <div class="option-section">
+                        <h3 class="section-title">Speed of Text (In seconds)</h3>
+                        <input type="range" id="speed" name="numQuestions" value="0" min="0" max="1000" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                    </div>-->
+            
+            <p id="modalMessage"></p>
+            
+            </div>
+            <br>
+            
+            
+            <button id='closeModalBtn' class="button">OK</button>
+        
+    </dialog>
+    <!--settings head-->
+    <div id="settings-full">
+    <div id="startScene" class="start-scene-container">
+        <div class="start-scene-card" id="overflow-set">
+            <h2 class="title">Quiz Setup</h2>
+            <p class="subtitle">Customize your practice session.</p>
+
+            <form id="quizOptionsForm">
+                <div class="overflow-set">
+                <!---sel-->
+                
+                <div class="option-section" id="vs">
+                    <h3 class="section-title">Verse Selection</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="verseSelection" value="random" checked>
+                            <span class="radio-custom"></span>
+                            Random
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="verseSelection" value="byReference">
+                            <span class="radio-custom"></span>
+                            By Reference
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="verseSelection" value="alphabet" >
+                            <span class="radio-custom"></span>
+                            Alphabetically
+                        </label>
+                    </div>
+                </div>
+                <!---sel-->
+                <div class="option-section" id="qt">
+                    <h3 class="section-title">Question Type</h3>
+                    <div class="checkbox-container">
+                        <label class="toggle-label"><input type="checkbox" name="quizMode" value="quote" checked>Quotes</label>
+                        <label class="toggle-label"><input type="checkbox" name="quizMode" value="ftv" checked title="Finish the Verse"> FTV</label>
+                        <label class="toggle-label"><input type="checkbox" name="quizMode" value="SQ:" checked> SQ</label>
+                        <label class="toggle-label"><input type="checkbox" name="quizMode" value="According to" checked>According to </label>
+                        <label class="toggle-label"><input type="checkbox" name="quizMode" value="question"  checked title="Regluar questions">Questions</label>
+                    </div>
+                </div>
+              
+                <!---sel-->
+                
+                <div class="option-section"id="nq">
+                    <h3 class="section-title">Number of Questions</h3>
+                    <input type="number" id="numQuestions" name="numQuestions" value="20" min="1" max="100" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                </div>
+                <!---sel-->
+                    <div class="option-section extra">
+                        <h3 class="section-title">Length of Timer (Length of zero will be no timer)</h3>
+                        <input type="number" id="secs" name="numQuestions" value="30" min="0" max="1000" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                    </div>
+                    <!---sel-->
+                    <div class="option-section extra">
+                        <h3 class="section-title">Speed of Text (In milliseconds)</h3>
+                        <div class="range-display-container">
+                            <!-- This is your existing range input. -->
+                            <input type="range" id="speed" name="numQuestions" value="0" min="0" max="2000">
+                            <!-- Add a new span element to display the current value. -->
+                            <span id="speedValue">0</span>
+                        </div>
+                    </div>
+                    <!---sel-->
+                    <div class="option-section extra"id="mc">
+                        <h3 class="section-title">Question Selection</h3>
+                        <div class="radio-group">
+                            <label  id="month" class="radio-label">
+                                <input type="radio" name="monthSelected" value="month" checked>
+                                <span class="radio-custom"></span>
+                                 By Months
+                            </label>
+                            <label id="chapter" class="radio-label">
+                                <input type="radio" name="monthSelected" value="chapter">
+                                <span class="radio-custom"></span>
+                                 By Chapters
+                            </label>
+                        </div>
+                    </div>
+                    <div id="chapters" class="checkbox-container"></div>
+                    <div id="monthDiv" class="option-section">
+                        
+                        <h3 class="section-title">Select Months</h3>
+                        <div class="checkbox-container">
+                            <label class="toggle-label"><input type="checkbox" name="month" value="october"> October</label>
+                            <label class="toggle-label"><input type="checkbox" name="month" value="november"> November</label>
+                            <label class="toggle-label"><input type="checkbox" name="month" value="december"> December</label>
+                            <label class="toggle-label"><input type="checkbox" name="month" value="january"> January</label>
+                            <label class="toggle-label"><input type="checkbox" name="month" value="february"> February</label>
+                            <label class="toggle-label"><input type="checkbox" name="month" value="march"> March</label>
+                        </div>
+                    </div>
+                    <!---sel-->
+                <div class="option-section extra" id="tw">
+                    <h3 class="section-title">Trigger Words</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" id="highlight"name="verseSelectionH" value="highlight" checked>
+                            <span class="radio-custom"></span>
+                            Highlight
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio"id="ingore" name="verseSelectionH" value="ingore">
+                            <span class="radio-custom"></span>
+                            Ingore
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="stop" name="verseSelectionH" value="stop" >
+                            <span class="radio-custom"></span>
+                            Stop at Word
+                        </label>
+                    </div>
+                </div>
+                <!---sel-->
+                <div class="option-section" id="fgs ">
+                    <h3 class="section-title">Flight</h3>
+                    <div class="checkbox-container">
+                        <label class="toggle-label"><input type="checkbox" name="flight" value="A" checked> A</label>
+                        <label class="toggle-label"><input type="checkbox" name="flight" value="B" checked> B</label>
+                        <label class="toggle-label"><input type="checkbox" name="flight" value="C" checked> C</label>
+                        <label class="toggle-label"><input type="checkbox" name="flight" value="T" checked> T</label>
+                    </div>
+                </div>
+                <!--sel-->
+            </div>
+                 <!--button-start-->
+               <a id="startQuizButton2"> <button type="submit" class="button" id="startQuizButton" >Start Quiz</button></a>
+                 
+            </form>
+        </div>
+    </div>
+    </div>
+<!--quizScene-->
+    <main id="nextScene" class="quiz-container" style="display: none;">
+        <div class="quiz-card" id="card">
+            <a id="study-anchor" href="/quiz_Study.html#quiz-370" title="Go to Study Page" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
+                <button id="studyBtn" class="settings-icon-btn" aria-label="Open Study Page" style="padding: 5px; width: 34px; height: 34px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                </button>
+            </a>
+            <button id="BTN" class="settings-icon-btn" aria-label="Open Settings">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+            <div class="quiz-header-area" id="clear">
+                <div id="quizTimer" class="timer-circle">
+                    <span class="timer-number"></span>
+                  </div>
+                <!--<div id="quiz-timer" class="mb-4 shadow-lg">
+                   
+                    <span class="timer-display">
+                     
+                    </span>
+                </div>
+                
+                
+                <p id="status-message" class="text-center text-base font-medium text-gray-600">Time remaining: 30 seconds</p> -->
+                <div class="fallback-message" id="quizHeader"></div>
+                <button id="retry" class="answer-button incorrect1 extra-margin"><span>Retry Question </span></button>
+                <div id="review" class="reveiw"></div>
+                <button id="new-quiz" class="button" style="display: none;"> Review incorrect Questions</button>
+                <main>
+            </div>
+            
+            <div class="progress-container" id="progressBar2">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <button id="correctbtnQ" class="answer-button correct1 extra-margin">Question Correct!</button>
+          <div id="finish-question" ><button id="f-btn" class="f-btn-black button">
+            <p id="f-txt">
+                Finish question 
+                <br>
+                <small>(not the answer)</small>
+            </p>
+        </button></div>
+
+           <div class="quiz-content">
+            <div id="questionNumber">1</div>
+            
+            <div class="text-container" id="quiz-text-content">
+                <h2 id="main-text"></h2>
+                <h2 id="second-text" class="blinking-text"></h2>
+            </div>
+            <textarea spellcheck="false" placeholder="Enter Verse" id="verse" class="blueborder"></textarea>
+            <div id="text-area-shadow" class="text-area-shadow blueborder"></div>
+            <div id="versedrop" class="drag-zone draggable-container blueborder"> </div>
+               <div id="verse-con" class="draggable-container drag-zone blueborder"> </div>
+                <!-- Comment: Mic button moved back to its position directly under the #verse container -->
+            <button id="micBtn" class="micBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mic-icon"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                <span id="micSpan">Press For Mic</span>
+            </button>
+            
+                <!--<div class="quiz-footer">
+                    <div class="score-display" id="score">Score: 0</div>
+                    <div class="question-count" id="questionCount">Question: 0/0</div>
+                </div>-->
+              
+                <div class="button-group">
+                    <button type="reset" class="button" id="submit">Submit</button>
+                    <button type="reset" class="button" id="submit-finish">Submit</button>
+                    <button id="correctbtn" class="answer-button correct1">Correct!</button>
+                    <button id="incorrectbtn" class="answer-button incorrect1">Incorrect!</button>
+                    <button id="pleasebtn" class="answer-button orange">Please Correct</button>
+                    <button id="next" class="button" type="reset" >Next</button>
+                    <button id="stop-text" class="button" type="button" >STOP QUESTION</button>
+                    <button id="pleasefinish" class="answer-button black">Finish the Question 
+                        
+                    </button>
+                    <button id="More" class="answer-button orange">More information</button>
+                    <!--<button id="BTN" class="button"> Quiz Settings</button>-->
+                    <button type="button" class="button" id="startreview" >Start Quiz</button>
+                    <button id="puralbtn" class="answer-button orange">Incorrect Form</button>
+                     <!-- Comment: Print Button positioned in the top right corner -->
+        <a href="PageToPrintQuestion.html" target="_blank" title="Print Questions (Opens in New Tab)" class="print-button-start-scene">
+            <button id="printBtnLink" class="button print-button-link" type="button">
+                <!-- Comment: Inline SVG for a clean print icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            </button>
+        </a>
+                    <a href="index.html"><button id="restart" class="button" type="reset" >Home</button></a>
+                </div>
+            </div>
+        </div>
+        </main>
+    </main>
+    <div id="hi" ></div>
+   
+    <script type="module" src="main.js"></script>
+    <script type="module" src="quizFile.js"></script>
+</body>
+</html>

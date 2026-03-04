@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Quizzing Dashboard</title>
+    <link rel="stylesheet" href="learn.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <h1>Practice Quizzing</h1>
+            <p>Select a book to begin your study journey.</p>
+        </header>
+        <main class="dashboard-content" id="Ldisplay">
+            <!-- Dynamic content will be added here -->
+        </main>
+        <footer class="dashboard-footer">
+            <button id="Lback" class="nav-button">Back</button>
+           
+        </footer>
+    </div>
+    <script type="module">
+        import { QuizCompanion, HtmlContentHandling, delog, Sockets } from './main.js';
+        //web socket client
+        const wsc = new Sockets('ws://localhost:8080')
+        wsc.handleConnection();
+
+       const maxChpsLen ={
+        Jonah:4,
+        Matthew:28
+       }
+        const Quiz = new QuizCompanion();
+        const quizDates = Quiz.quizMonths;
+        const books = Quiz.books;
+        const monthslist = quizDates.map(m => m[0])
+        const chapters = quizDates.map(m => m[1]).flat();
+        const importInfo = { 'Matthew': chapters.slice(0, chapters.length - 1), 'Jonah': [1, 2, 3, 4] };
+        let currentBook, currentChp= null;
+        let isBook = true;
+
+        // Function to generate HTML for books or chapters
+        function generateCards(items, type) {
+            return items.map(item => `
+                <div class="card ${type}" id="${item}">
+                    <h2>${item}</h2>
+                    ${type === 'chps' ? `
+                        <p>Progress: (comming soon)</p>
+                        <p>Chapter ${item}</p>
+                        <p>View the  chapter.</p>
+                        <div class="card-buttons">
+                            <button type="button" class="view-button" id="${item}View">View</button>
+                            
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+     async  function load(month){
+       // const { e, passage } = await getEsvPassage(month);
+             
+           // return {passag}
+
+      
+      const savedtext = {}
+      //for(const m of monthslist.slice(0, 4)){
+
+     }
+    load()
+    //getEsvPassage(null, null, null, `Matthew+1-12`);
+        // Function to handle button clicks
+        // Corrected onBtnClick function focusing on the event target
+async function onBtnClick(event) {
+    // Determine the ID of the chapter card (the parent)
+    const target = event.target.closest('.card'); 
+    if (!target) return; // Exit if                 not clicking within a card
+
+    const id = target.id; // This is the chapter ID (e.g., '10')
+    let btnId = event.target.id; // This could be '10View', '10Study', or just '10'
+
+    delog('id', id, target);
+    
+    if (isBook) {
+        isBook = false;
+        currentBook = id;
+                const chaptersHTML = generateCards(importInfo[id], 'chps');
+                document.getElementById('Ldisplay').innerHTML = chaptersHTML;
+                   
+                // Add event listeners for chapter buttons
+                const chapterCards = document.querySelectorAll('.card.chps');
+                chapterCards.forEach(card => card.addEventListener('click', onBtnClick));
+    } else {
+        // Determine if a specific action button was clicked
+        const isView = event.target.classList.contains('view-button');
+        const isStudy = event.target.classList.contains('study-button');
+
+        // Only proceed to fetch data if an action button was clicked
+        if (isView || isStudy) {
+            currentChp = id;
+            
+            // Getting the reference for the fetch operation
+            const thisMonth = quizDates.find(d => d[1].includes(id))[0];
+            console.log(thisMonth, id);
+            
+            // Await the passage fetch
+            const { e, passage } = await getEsvPassage(thisMonth, id);
+            if (e) {
+                // Handle the error (e.g., show a message to the user)
+                document.getElementById('Ldisplay').innerHTML = `
+                    <div class="passage-content">
+                        <h2>Error Loading Chapter ${id}</h2>
+                        <p>A data retrieval error occurred: ${e}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Update the DOM based on the specific button clicked
+            if (isView) {
+                delog(passage[id], 'Passage for chapter', id);
+                document.getElementById('Ldisplay').innerHTML = `
+                    <div class="passage-content">
+                        <h2>Chapter ${id}</h2>
+                        <p>${passage[id].join(' ').replace(/\n/g, '<br>')}</p>
+                    </div>
+                `;
+            } else if (isStudy) {
+                delog('id', id, 'study');
+                const sectinsHtml = passage.sections.map(section => `
+                    <div class="section">
+                        <h3>${section.title}</h3>
+                        <p>${section.content}</p>
+                    </div>
+                `).join('') || '<p>No sections available.</p>';
+                
+                 
+                document.getElementById('Ldisplay').innerHTML = `
+                    <div class="passage-content">
+                        <h2>Study Chapter ${id}</h2>
+                        <h1>[quizzing and studying will be added]</h1>
+                        <h3>Put sections here</h3>
+                         ${sectionsHtml}
+                    </div>
+                `;
+            }
+        }
+        // If the card itself (not a button) was clicked, do nothing.
+    }
+}
+        async function loadPassage(query) {
+  
+  }
+  //loadPassage('december');
+        // Function to fetch ESV passage
+       // Function to fetch ESV passage
+// Function to fetch ESV passage
+async function getEsvPassage(month, chp, storageType = localStorage, queryRef) {
+    // Determine the query from the month or reference
+    const query = month;
+    console.log('ty', query); // Logs the query string (e.g., 'december')
+    
+    // Find the corresponding quiz data entry
+    const values = quizDates.find(q => q[0] === month);
+    // Exit if the month entry is not found
+    if (!values) return { e: 'Invalid month or reference provided' };
+    // Stores the current book's name (e.g., 'Matthew')
+    const book = values[2]; 
+const parsed = JSON.parse(storageType.getItem('esvText' )|| '{}');
+console.log(parsed, chp,  'parsed');
+if(parsed[book]){
+if(parsed[book][chp]?.length > 0){
+    console.log('getting passage from storage');
+    return {passage: parsed[book], sections: []};
+}
+  }  // Begin the try block to handle potential errors during the WebSocket call
+    try {
+        console.log('getting passage from ws');
+        // Await the promise from the WebSocket client to get the passage
+        const { passage: p , error} = await wsc.emit('getPassage', null, query);
+        if(error ) throw new Error(error);
+        
+        // Extract sections and chapter text from the successful response
+        const sections = p.sections || []
+        const chpsText = p.esvText[book] || {} // New passages fetched for the current book
+        console.log(p.esvText, p, 'works~!!!!!!!!!!');
+
+        // Load and parse existing localStorage data
+        const Stroagesv = JSON.parse(storageType.getItem('esvText') || '{}');
+        
+        // Combine newly fetched text with existing stored text for the current book
+        // Use a safe fallback for Stroagesv[book] to ensure merging works
+        const existingChps = Stroagesv[book] || {};
+        const combine = { ...existingChps, ...chpsText };
+
+        console.log(maxChpsLen[book], 'max', combine, Stroagesv);
+        
+        // Prepare the new object to save (merging the updated current book with all other books)
+        const dataToSave = {
+            ...Stroagesv, // Keep all data for other books (e.g., Jonah)
+            [book]: combine // Overwrite/Update data for the current book (Matthew)
+        };
+        
+        // Logic to check storage limit before saving
+        // This check is now based on the total chapters for the current book, not the whole storage
+        if (Object.keys(combine).length > (maxChpsLen[book])) { // Check against the whole book's max chapters
+            console.log('Book chapter limit exceeded in combined object.');
+            // You may want to still save if the chapter count is simply higher than half, but for now:
+            // Don't save if the data looks unexpectedly large/corrupt
+            return { passage: chpsText, sections };
+        } 
+        
+        // Save the comprehensive data object back to localStorage
+        storageType.setItem('esvText', JSON.stringify(dataToSave));
+        
+        // Return the successfully retrieved passage and sections
+        return { passage: chpsText, sections };
+
+    } catch (error) {
+        // Catch any uncaught rejection from wsc.emit and log it and errors that weree thrown
+        console.error('WebSocket passage fetch failed:', error.message);
+        // Return an error object for the calling function to handle
+        return { e: error.message };
+    }
+}
+        document.getElementById('Ldisplay').innerHTML = generateCards(books, 'books');
+        const bookCards = document.querySelectorAll('.card.books');
+        bookCards.forEach(card => card.addEventListener('click', onBtnClick));
+
+        // Navigation buttons
+        const backBtn = document.getElementById('Lback');
+        backBtn.addEventListener('click', () => {
+            if (!isBook) {
+                isBook = true;
+                document.getElementById('Ldisplay').innerHTML = generateCards(books, 'books');
+                const bookCards = document.querySelectorAll('.card.books');
+                bookCards.forEach(card => card.addEventListener('click', onBtnClick));
+            }
+        });
+    </script>
+</body>
+</html>

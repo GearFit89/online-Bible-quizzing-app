@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Companion</title>
+    <style>
+        #loading {
+            display: none;
+            font-size: 1.2em;
+            color: blue;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        #quiz-complete {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz Companion</h1>
+    <label for="functionSelect">Select function to call:</label>
+    <select id="functionSelect">
+        <option value="">-- Select a function --</option>
+    </select>
+    <label for="args">Enter arguments (comma-separated):</label>
+    <input type="text" id="args" placeholder="e.g., arg1, arg2">
+    <button id="callFunction">Call Function</button>
+    <p id="loading">Loading...</p>
+    <div id="result"></div>
+    <div id="quiz-complete">Quiz is complete! Thank you for participating.</div>
+
+    <script type="module">
+        import { QuizCompanion } from "./main.js";
+        import TrigScriptProcessor from  "./trigscript.js";
+     let Quiz;
+        // Add a dropdown to select the class
+        const classSelect = document.createElement('select');
+        classSelect.id = 'classSelect';
+        const classes = [
+            { value: 'QuizCompanion', text: 'Quiz Companion' },
+            { value: 'TrigScriptProcessor', text: 'Trig Script Processor' }
+        ];
+        classes.forEach(cls => {
+            const option = document.createElement('option');
+            option.value = cls.value;
+            option.textContent = cls.text;
+            classSelect.appendChild(option);
+        });
+
+        const label = document.createElement('label');
+        label.htmlFor = 'classSelect';
+        label.textContent = 'Select class to use:';
+
+        const body = document.querySelector('body');
+        body.insertBefore(label, body.firstChild);
+        body.insertBefore(classSelect, label.nextSibling);
+    
+        // Update Quiz instance based on selected class
+        classSelect.addEventListener('change', () => {
+            const selectedClass = classSelect.value;
+            if (selectedClass === 'QuizCompanion') {
+            Quiz = new QuizCompanion();
+            } else if (selectedClass === 'TrigScriptProcessor') {
+            Quiz = new TrigScriptProcessor();
+            }
+            populateFunctionDropdown();
+        });
+        
+
+        // Populate the function dropdown
+        function populateFunctionDropdown() {
+            const functionSelect = document.getElementById('functionSelect');
+            const functionNames = Object.getOwnPropertyNames(Object.getPrototypeOf(Quiz))
+                .filter(name => typeof Quiz[name] === 'function' && name !== 'constructor');
+
+            functionNames.forEach(funcName => {
+                const option = document.createElement('option');
+                option.value = funcName;
+                option.textContent = funcName;
+                functionSelect.appendChild(option);
+            });
+        }
+
+        // Initialize the quiz
+        async function initializeQuiz() {
+            const loadingIndicator = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            try {
+                loadingIndicator.style.display = 'block';
+                await Quiz.initializeQuiz();
+                resultDiv.textContent = 'Quiz initialized successfully. You can now call functions.';
+                populateFunctionDropdown();
+            } catch (error) {
+                console.error(error);
+                resultDiv.textContent = `Error initializing quiz: ${error.message}`;
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        // Call function logic
+        document.getElementById('callFunction').addEventListener('click', async () => {
+            const functionSelect = document.getElementById('functionSelect');
+            const functionName = functionSelect.value;
+            const argsInput = document.getElementById('args').value.trim();
+            const resultDiv = document.getElementById('result');
+            const loadingIndicator = document.getElementById('loading');
+            const quizCompleteDiv = document.getElementById('quiz-complete');
+
+            resultDiv.textContent = '';
+            quizCompleteDiv.style.display = 'none';
+
+            if (!functionName) {
+                resultDiv.textContent = 'Please select a function.';
+                return;
+            }
+
+            try {
+                loadingIndicator.style.display = 'block';
+                const args = argsInput ? argsInput.split(',').map(arg => arg.trim()) : [];
+                const result = await Quiz[functionName](...args);
+                console.log(result);
+
+                if (functionName === 'endQuiz') {
+                    quizCompleteDiv.style.display = 'block';
+                } else {
+                    resultDiv.textContent = `Result: ${JSON.stringify(result)}`;
+                }
+            } catch (error) {
+                console.error(error);
+                resultDiv.textContent = `Error: ${error.message}`;
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        });
+
+        // Start by initializing the quiz
+        initializeQuiz();
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>

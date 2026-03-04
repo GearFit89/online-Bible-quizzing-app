@@ -1,0 +1,555 @@
+
+/* Base Styles for the Test Harness (Non-Print View) */
+body {
+    font-family: 'Inter', sans-serif;
+    /* Set the default font */
+    background-color: #f4f4f4;
+    /* Light background */
+    padding: 20px;
+    /* Add padding around the content */
+    text-align: center;
+    /* Center content */
+}
+
+.button {
+    padding: 12px 24px;
+    /* Set padding for the button */
+    margin-top: 20px;
+    /* Add margin above the button */
+    background-color: #4f46e5;
+    /* Indigo color for the button */
+    color: white;
+    /* White text */
+    border: none;
+    /* No border */
+    border-radius: 8px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    font-size: 16px;
+    /* Font size */
+    font-weight: 700;
+    /* Bold font weight */
+    transition: background-color 0.2s;
+    /* Smooth transition */
+    box-shadow: 0 4px #3730a3;
+    /* Shadow for depth */
+}
+
+.button:hover {
+    background-color: #3730a3;
+    /* Darker shade on hover */
+}
+
+/* PREVIEW MODE STYLES */
+#printArea {
+    /* Now visible by default as a preview container */
+    display: block;
+    margin: 20px auto;
+    /* Center the container on the screen */
+    width: 90%;
+    /* Use 90% of the screen width */
+    max-width: 1200px;
+    /* Limit max width for readability */
+    background-color: white;
+    /* White background for contrast */
+    padding: 20px;
+    /* Add padding */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Clearer shadow for a lifted look */
+    text-align: left;
+    /* Align text to the left */
+    min-height: 200px;
+    /* Ensure a visible area even if empty */
+}
+
+/* ----------------------------------------------------------------- */
+/* PRINT AND PREVIEW CONTENT STYLES (Shared) */
+/* ----------------------------------------------------------------- */
+
+/* 1. Base Font and Layout for Preview */
+.print-header {
+    /* FIX: Corrected font family syntax for 'Times New Roman' */
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 9pt;
+    /* Smaller base font for max content per page */
+    color: #000;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+/* 4. Print Header Styling (Centering, Removing Space, Adding Separator) */
+.print-header {
+    text-align: center;
+    /* Center the header text */
+    margin-bottom: 5pt;
+    /* Space below the dividing line */
+    padding-bottom: 5pt;
+    /* Padding above the dividing line */
+    border-bottom: 1px solid #000;
+    /* Add a clear line separator */
+}
+
+/* CRITICAL FIX: Remove default browser margins from h1 and p elements */
+.print-header h1,
+.print-header p {
+    margin: 0;
+    /* Removes default top and bottom margins from the text elements */
+    padding: 0;
+    /* Ensures no padding contributes to the space */
+    line-height: 1.2;
+    /* Tighter line spacing */
+}
+
+.print-title {
+    font-size: 14pt;
+    /* Title font size */
+    font-weight: bold;
+}
+
+/* 5. Highlighting Styles */
+.highlight-ftv {
+    color: #8b5cf6 !important;
+    /* Purple color for FTV reference */
+    font-weight: bold;
+}
+
+.highlight-word {
+    color: #4f46e5 !important;
+    /* Blue color for highlighted words */
+    font-weight: bold;
+    text-decoration: underline;
+    /* Add underline for better print visibility */
+}
+
+.highlight-char {
+    color: #B45000 !important;
+    /* Darker orange/brown for highlighted characters */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* 6. Questions Grid Styling (Box Structure and Borders) */
+.questions-grid {
+    width: 100%;
+    /* Comment: Apply a single solid border around the entire grid, now in dark slate gray */
+    border: 1px solid #475569;
+    display: grid;
+    /* Column definition: 4 columns (20%, 10%, 30%, 40%) */
+    grid-template-columns: 20% 10% 30% 40%;
+    gap: 0;
+    /* Remove gap to make borders continuous */
+    page-break-inside: avoid;
+    /* Prevents breaking inside a row, but not the entire grid */
+    /* FIX: Corrected font family syntax for 'Times New Roman' */
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    /* Apply font to content */
+    font-size: 8pt;
+    /* Apply font size to content */
+    /* FIX: Ensure no unexpected space is below the header */
+    margin-top: 0;
+}
+
+.grid-header {
+    font-weight: bold;
+    background-color: #ccfbf1;
+    /* Light teal background for headers */
+    padding: 6pt;
+    font-size: 10pt;
+    text-align: center;
+    /* All headers centered */
+    /* Internal header borders match the new dark slate gray */
+    border-right: 1px solid #475569;
+    border-bottom: 1px solid #475569;
+}
+
+/* FIX: Remove right border from the last column header (the 4th column) */
+.questions-grid .grid-header:nth-child(4n) {
+    border-right: none;
+}
+
+.grid-item {
+    padding: 0pt 8pt;
+   
+    font-size: 8px;
+    /* FIX: Center alignment for all grid-item content */
+    display: flex !important;
+        /* Comment: Enable flexbox for centering */
+        align-items: center !important;
+        /* Comment: Center vertically */
+        justify-content: center !important;
+        /* Comment: Center horizontally */
+        /* FIX: Apply full borders to every item & NEW LIGHT GRAY COLOR */
+        border: 1px solid #ccc !important;
+        /* Changed from #444 to #ccc (light gray) */
+        /* CRITICAL CHANGE: Set page-break-after to always auto. This helps the browser ensure */
+        /* a bottom line prints even when a row breaks right at the bottom of a page. */
+        page-break-after: auto !important;
+        /* FIX: Remove background color */
+        background-color: transparent !important;
+        /* Comment: Ensure no background color prints */
+        text-align: center;
+        /* Comment: Horizontal alignment fallback */
+        word-wrap: break-word;
+        /* Comment: Ensure long text wraps */
+        white-space: normal;
+        /* Comment: Allow text wrapping */
+       
+        /* Comment: Set cell padding */
+       
+        /* Comment: Set font size */
+        font-family: Verdana, Arial, sans-serif !important;
+        /* Apply new font to content */
+    border-right: 1px solid #94a3b8;
+    border-bottom: 1px solid #94a3b8;
+}
+
+/* Zebra striping - Target items of the 2nd, 4th, 6th, etc., rows for an alternate background color. (4 columns per row) */
+.questions-grid .grid-item:nth-child(8n + 9),
+.questions-grid .grid-item:nth-child(8n + 10),
+.questions-grid .grid-item:nth-child(8n + 11),
+.questions-grid .grid-item:nth-child(8n + 12) {
+    background-color: #f0f9ff;
+    /* Very light blue/off-white for even rows */
+}
+
+/* FIX: Ensure the last column items (the 4th column) don't have a right border */
+.questions-grid .grid-item:nth-child(4n) {
+    border-right: none;
+}
+
+/* FIX: Remove bottom border from the last row items (last 4 items) */
+.questions-grid div:nth-last-child(-n+4) {
+    border-bottom: none;
+}
+
+/* ----------------------------------------------------------------- */
+/* PRINT STYLES - Ensures clean output if user still prints manually */
+/* ----------------------------------------------------------------- */
+@media print {
+
+    /* 1. Global Reset for Print */
+    body {
+        margin: 0 !important;
+        /* Comment: Eliminate default body margins to start content at top */
+        padding: 0 !important;
+        /* Comment: Eliminate default body padding */
+    }
+
+    /* 2. Hide Non-Print Elements */
+    .app{
+        display: none !important;
+        /* Comment: Hide everything except the print area */
+    }
+
+    /* 3. Reset Print Area for Tight Printing & New Font */
+    #printArea {
+        padding: 0;
+        /* Comment: Remove padding to eliminate blank space */
+        margin: 0;
+        /* Comment: Remove margin to eliminate blank space */
+        box-shadow: none;
+        /* Comment: Remove box shadow for printing */
+        width: 100%;
+        /* Comment: Use full width for printing */
+        /* NEW FONT: Changed font stack for better number/letter clarity in print */
+        font-family: Verdana, Arial, sans-serif !important;
+    }
+
+    /* 4. Print Header Styling (ensure no space) */
+    .print-header {
+        margin: 0;
+        /* Comment: Remove external margins */
+        padding: 0;
+        /* Comment: Remove padding */
+        padding-bottom: 5pt;
+        /* Comment: Add padding below header text */
+        text-align: center;
+        /* Comment: Center header text */
+        border-bottom: 1px solid #000;
+        /* Comment: Add separator line */
+    }
+
+    .print-header h1,
+    .print-header p {
+        margin: 0;
+        /* Comment: Remove default element margins */
+    }
+
+    /* 5. Questions Grid Styling */
+    .questions-grid {
+        display: grid;
+        /* Comment: Use CSS grid for layout */
+        /* Column definition: 4 columns (20%, 10%, 30%, 40%) */
+        grid-template-columns: 20% 10% 30% 40%;
+        gap: 0;
+        /* Comment: Remove gap between cells */
+        /* FIX: Remove outer border, individual cells will provide all borders */
+        border: none !important;
+        page-break-inside: auto;
+        /* Comment: Allow page breaks between rows */
+        margin-top: 0;
+        /* Comment: Remove top margin */
+    }
+
+    /* Print break settings for clean box breaks */
+    /* Comment: Ensure the first cell of a row knows a break can happen here, for clean break on row start */
+    .questions-grid .grid-item:nth-child(4n + 5) {
+        page-break-before: auto;
+        /* Comment: Allow page break before new row */
+    }
+
+    .grid-header {
+        /* FIX: Added flex properties for absolute vertical and horizontal centering */
+        display: flex !important;
+        /* Comment: Enable flexbox for centering */
+        align-items: center !important;
+        /* Comment: Center vertically */
+        justify-content: center !important;
+        /* Comment: Center horizontally */
+        /* FIX: Apply full borders to headers & NEW LIGHT GRAY COLOR */
+        border: 1px solid #ccc !important;
+        /* Changed from #444 to #ccc (light gray) */
+        /* FIX: Remove background color */
+        background-color: transparent !important;
+        /* Comment: Ensure no background color prints */
+        text-align: center;
+        /* Comment: Horizontal alignment fallback */
+        white-space: normal;
+        /* Comment: Allow text wrapping */
+        padding: 6pt;
+        /* Comment: Set cell padding */
+        font-size: 0.8rem;
+        /* Comment: Set font size */
+        font-family: Verdana, Arial, sans-serif !important;
+        /* Apply new font to headers */
+    }
+
+    /* The header still needs a slightly darker border on the top and left to define the outer edge */
+    .questions-grid .grid-header:first-child,
+    .questions-grid .grid-header:nth-child(2),
+    .questions-grid .grid-header:nth-child(3),
+    .questions-grid .grid-header:nth-child(4) {
+        /* Apply the slightly darker #444 border only to the very top row's border-top */
+        border-top: 1px solid #444 !important;
+    }
+
+ 
+
+    .grid-item {
+        /* FIX: Added flex properties for absolute vertical and horizontal centering */
+        display: flex !important;
+        /* Comment: Enable flexbox for centering */
+        align-items: center !important;
+        /* Comment: Center vertically */
+        justify-content: center !important;
+        /* Comment: Center horizontally */
+        /* FIX: Apply full borders to every item & NEW LIGHT GRAY COLOR */
+        border: 1px solid #ccc !important;
+        /* Changed from #444 to #ccc (light gray) */
+        /* CRITICAL CHANGE: Set page-break-after to always auto. This helps the browser ensure */
+        /* a bottom line prints even when a row breaks right at the bottom of a page. */
+        page-break-after: auto !important;
+        /* FIX: Remove background color */
+        background-color: transparent !important;
+        /* Comment: Ensure no background color prints */
+        text-align: center;
+        /* Comment: Horizontal alignment fallback */
+        word-wrap: break-word;
+        /* Comment: Ensure long text wraps */
+        white-space: normal;
+        /* Comment: Allow text wrapping */
+       
+        /* Comment: Set cell padding */
+       
+        /* Comment: Set font size */
+        font-family: Verdana, Arial, sans-serif !important;
+        /* Apply new font to content */
+    }
+
+    /* FIX: Ensure the left side border of the first column is a bit bolder to match the header */
+   
+
+    .question-block {
+        /* Comment: The primary rule: tells the browser to keep the entire block on one page */
+        page-break-inside: avoid;
+        /* Comment: Modern alias for better cross-browser compatibility */
+        break-inside: avoid;
+    }
+
+    .separator {
+        /* Comment: Helps prevent the separator line from starting a new page right after a question ends */
+        page-break-before: avoid;
+    }
+
+
+    /* REMOVED: The previous rule that removed border-right from the last column item (4th column)
+       The new full border rule now correctly adds the closing right border. */
+
+    /* REMOVED: The previous rule that removed border-bottom from the last row
+       The new full border rule now correctly adds the closing bottom border. */
+
+    /* Only force *highlight* colors, not background colors */
+    .highlight-ftv,
+    .highlight-word,
+    .highlight-char {
+        -webkit-print-color-adjust: exact !important;
+        /* Comment: Force color printing in Chrome/Safari */
+        color-adjust: exact !important;
+        /* Comment: Force color printing in others */
+    }
+}
+/* Style for text size buttons */
+.text-size button {
+    background-color: #6c63ff;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.text-size button:hover {
+    background-color: #4b47cc;
+}
+/* General Button Styles */
+.button {
+    padding: 10px 20px;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #3730a3;
+}
+
+/* Text Size Buttons */
+.text-size button {
+    background-color: #6c63ff;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.text-size button:hover {
+    background-color: #4b47cc;
+}
+
+/* Loading Box Styles */
+#load {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    color: white;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#load h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#load p {
+    font-size: 18px;
+    margin: 5px 0;
+}
+/* --- GRID LINE TOGGLE FIX (NEW STYLES) --- */
+/* The class applied to #printArea to hide borders */
+#printArea.hide-grid-lines .questions-grid {
+    border: none !important; /* Remove outer border */
+}
+
+#printArea.hide-grid-lines .grid-header,
+#printArea.hide-grid-lines .grid-item {
+    border: none !important; /* Remove all internal borders */
+}
+body {
+    font-family: 'Inter', sans-serif;
+    /* Set the default font */
+    background-color: #f4f4f4;
+    /* Light background */
+    padding: 20px;
+    /* Add padding around the content */
+    text-align: center;
+    /* Center content */
+}
+
+/* --- MODERN BUTTON STYLES (Replaces existing .button) --- */
+.button {
+    padding: 10px 20px;
+    /* Set padding for the button */
+    margin-top: 20px;
+    /* Add margin above the button */
+    background-color: #4f46e5;
+    /* Indigo color for the button */
+    color: white;
+    /* White text */
+    border: none;
+    /* No border */
+    border-radius: 6px;
+    /* Slightly less rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    font-size: 15px;
+    /* Font size */
+    font-weight: 600;
+    /* Semi-bold font weight */
+    transition: background-color 0.2s, transform 0.1s;
+    /* Smooth transition for hover and click */
+    box-shadow: none; /* **MODERN FIX: Remove shadow for a flat look** */
+}
+
+.button:hover {
+    background-color: #6366f1; /* Lighter shade on hover */
+}
+
+.button:active {
+    background-color: #3730a3; /* Darker shade on click */
+    transform: translateY(1px); /* Slight press effect */
+}
+
+/* Text Size Buttons (Uses the new .button base style) */
+.text-size button {
+    background-color: #6c63ff;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    /* Inherit modern style, override color/padding for text size buttons */
+    box-shadow: none;
+    border: none;
+}
+
+.text-size button:hover {
+    background-color: #4b47cc;
+}
+/* --- END MODERN BUTTON STYLES --- */

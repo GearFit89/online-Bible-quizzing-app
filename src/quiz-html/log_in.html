@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Quizzing - Log In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for better icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles to enhance the design */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Modern Gradient Background */
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            padding: 1rem;
+        }
+
+        /* Enhanced Card Shadow for an 'App' look */
+        .card-shadow {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        /* Interactive Card Hover Effect */
+        .card-shadow:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Style for the main application title */
+        .app-title {
+            background-color: #3b82f6; /* Blue 500 */
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px; /* Fully rounded pill shape */
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.4);
+            letter-spacing: 0.05em; /* Small letter spacing */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <!-- Success Message Pop-up for Account Creation -->
+    <div id="success-message"
+        class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white font-semibold px-6 py-3 rounded-lg shadow-xl transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+        Account Created Successfully!
+    </div>
+    
+    <!-- Error Message Pop-up -->
+    <div id="server-error-message"
+        class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white font-semibold px-6 py-3 rounded-lg shadow-xl transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+        <!-- Error message content will be inserted here -->
+    </div>
+
+    <!-- Main Authentication Card -->
+    <div id="auth-card" class="card-shadow bg-white p-8 sm:p-10 rounded-xl w-full max-w-sm">
+        <header class="text-center mb-8">
+            <!-- App-like title styling -->
+            <h1 class="text-3xl font-extrabold text-gray-800">
+                <span class="app-title">Practice Quizzing</span>
+            </h1>
+        </header>
+
+        <form id="log-in-form" class="space-y-6">
+            <h2 class="text-2xl font-semibold text-center text-gray-700">Welcome Back</h2>
+            
+            <!-- Email Input -->
+            <input name="email" type="email" id="log-in-email" placeholder="Email Address" required
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+            
+            <!-- Password Input -->
+            <div class="relative">
+                <input name="password" type="password" id="log-in-password" placeholder="Password" required
+                    class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                <!-- Password Toggle Icon -->
+                <i class="fas fa-eye password-toggle absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer" 
+                   onclick="togglePasswordVisibility('log-in-password', this)"></i>
+            </div>
+            
+            <!-- Log In Button -->
+            <button type="submit"
+                class="w-full bg-blue-600 text-white p-3 rounded-lg font-extrabold shadow-md hover:bg-blue-700 transition duration-200 transform hover:scale-[1.01] active:scale-[0.99]">
+                Log In
+            </button>
+            
+            <!-- Link to Create Account -->
+            <a href="./create_account.html"
+                class="text-sm text-center block text-blue-600 hover:text-blue-800 transition duration-150">
+                Don't have an account? Create one
+            </a>
+            
+        </form>
+    </div>
+    
+    <!-- Link to the frontend authentication script (moved to end of body for faster page load) -->
+    <script src="./auth_scripts.js"></script>
+
+</body>
+
+</html>

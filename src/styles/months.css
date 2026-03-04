@@ -1,0 +1,112 @@
+.october {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #ff5733; /* Bright Red-Orange */
+  }
+  
+  .november {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #900c3f; /* Deep Magenta/Wine */
+  }
+  
+  .december {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #1a5276; /* Dark Teal-Blue */
+  }
+  
+  .january {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #3498db; /* Bright Sky Blue */
+  }
+  
+  .february {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #8e44ad; /* Deep Violet */
+  }
+  
+  .march {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #2ecc71; /* Vibrant Green */
+  }
+  
+  /* --- LESS DISTINCTIVE MONTHS (Apr - Sep) - Softer, 2px thick --- */
+  
+  .april {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #f1c40f; /* Muted Gold/Yellow */
+  }
+  
+  .may {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #38c172; /* Soft Spring Green */
+  }
+  
+  .june {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #95a5a6; /* Light Slate Gray */
+  }
+  
+  .july {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #f39c12; /* Warm Ocher/Orange */
+  }
+  
+  .august {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #e8a6a1; /* Pale Coral */
+  }
+  
+  .september {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #d7bde2; /* Soft Lavender */
+  }
+  
+  
+  /*
+  |--------------------------------------------------------------------------
+  | INLINE COLOR KEY SWATCH STYLES
+  |--------------------------------------------------------------------------
+  | Dedicated classes for the small color boxes in the legend.
+  */
+  .color-swatch-october { background-color: #ff5733; print-color-adjust: exact; }
+  .color-swatch-november { background-color: #900c3f; print-color-adjust: exact; }
+  .color-swatch-december { background-color: #1a5276; print-color-adjust: exact; }
+  .color-swatch-january { background-color: #3498db; print-color-adjust: exact; }
+  .color-swatch-february { background-color: #8e44ad; print-color-adjust: exact; }
+  .color-swatch-march { background-color: #2ecc71; print-color-adjust: exact; }
+  /*
+  |--------------------------------------------------------------------------
+  | GENERAL STYLING (Background, Font, etc.)
+  |--------------------------------------------------------------------------
+  | Base styles applied to the overall page elements.
+  */
+  
+  .month-name {
+      font-weight: 600;
+      font-size: 1.25rem;
+      padding: 0.5rem 0;
+      display: inline-block;
+      transition: transform 0.2s;
+  }
+  
+  .month-name:hover {
+      transform: scale(1.05);
+  }
+  @media print {
+    * {
+      -webkit-print-color-adjust: exact;
+      color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }

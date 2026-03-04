@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Print </title>
+    <!-- Load Inter font for consistency -->
+    <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="stylesheet" href="print.css">
+   <link rel="stylesheet" href="months.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+   
+
+
+<body>
+    <div class="actual-area" id="a-a">
+    <div id="appContainer" class="app">
+        <h1 class="text-2xl font-bold">Print Questions in Quiz</h1>
+        <p>Click the button to preview the structured, printable question list.</p>
+     
+
+        <!-- Button to trigger the print function -->
+        <button id="printBtn" class="button">Print All Questions</button>
+        <a href="Print_Settings.html" target="_blank"> <button id="toggleGridLines" class="button">Go to Print Settings</button></a>
+   
+    <br>
+    
+    <br>
+    <br>
+    <div class="text-size" id="click"><button id="plus">+</button><button id="test-size">Text Size</button><button id="minus">-</button></div>
+</div>
+    <!-- Container where the print content will be injected -->
+    <div id="printArea"></div>
+</div>
+<div id="load">Loading</div>
+    <script type="module">
+        import { QuizCompanion } from './main.js';
+        //when i change deblog to false all the the delog functions will stop 
+        //Quiz.deblog = true;
+        //updateClientInfo(selVerses, 'QuestionsToPrint', true) example
+        const Quiz = new QuizCompanion(false)
+        let allQs = {};
+        //console.log(allQs, 'all')
+        const allquestionsinquizapp = Quiz.updateClientInfo(null, 'QuestionsToPrint', false);
+        const quizSettings = Quiz.updateClientInfo(null, "QuizSettings", false);
+        console.log(quizSettings)
+        //filter out based on settings 
+        //months, flights, quizMode, ischp, chapters
+        //console.log(allquestionsinquizapp)
+        //console.log(quizSettings)
+        const plusBtn = document.getElementById('plus');
+const minusBtn = document.getElementById('minus');
+
+plusBtn.addEventListener('click', () => adjustTextSize(0.1));
+minusBtn.addEventListener('click', () => adjustTextSize(-0.1));
+
+
+
+function adjustTextSize(sizeChange) {
+    // Get all elements that have the class 'grid-item'
+    const gridItems = document.querySelectorAll('.grid-item');
+    // Get the root HTML element (<html>)
+    const root = document.documentElement;
+    // Get the computed style of the root element to find its base font size
+    const rootStyle = window.getComputedStyle(root);
+    // Parse the root font size (e.g., "16px") into a number (e.g., 16)
+    const rootPx = parseFloat(rootStyle.fontSize);
+
+    // Loop through each '.grid-item' found
+    gridItems.forEach((item) => {
+        // Get the computed style for the specific item
+        const style = window.getComputedStyle(item);
+        // Get the item's current font size in pixels (e.g., "16px")
+        const currentPx = parseFloat(style.fontSize);
+        
+        // Calculate the item's current size in 'rem' units by dividing by the root size
+        const currentRem = currentPx / rootPx;
+        
+        // Calculate the new 'rem' size by adding the 'sizeChange' (e.g., 0.1 or -0.1)
+        const newRem = currentRem + sizeChange;
+
+        // Define the minimum and maximum font size constraints in pixels
+        const minPx = 2;
+        const maxPx = 18;
+
+        // Convert the pixel constraints to 'rem' constraints
+        const minRem = minPx / rootPx; // e.g., 12 / 16 = 0.75rem
+        const maxRem = maxPx / rootPx; // e.g., 24 / 16 = 1.5rem
+
+        // Clamp the new 'rem' size to ensure it stays between the min and max 'rem' values
+        const clampedRem = Math.max(minRem, Math.min(maxRem, newRem));
+        
+        // Apply the new, clamped font size to the item using the 'rem' unit
+        item.style.fontSize = `${clampedRem}rem`;
+    });
+}
+        const plus = Quiz.id('plus')
+        const minus = Quiz.id('minus')
+        const click= Quiz.id('minus')
+       /* // click.addEventListener('click', (e) => {
+    // 1. Determine the size change
+    const sizeChange = (e.target.id === 'plus') ? 0.1 : -0.1;
+
+    // Check if the click target is one of your size buttons
+    if (e.target.id === 'minus' || e.target.id === 'plus') {
+
+        const displayedNodes = document.querySelectorAll('.grid-item');
+        
+        // This is a loop to iterate through ALL elements with the class 'grid-item'
+        displayedNodes.forEach(node => {
+            
+            // --- FIX: Get the current computed style for reliability ---
+            // If the size is set in a CSS file, .style.fontSize will be empty.
+            // window.getComputedStyle() gets the *actual* size used by the browser.
+            const currentStyle = window.getComputedStyle(node);
+            let currentSizeString = currentStyle.fontSize;
+            
+            // --- FIX: Set a default if style is not explicitly in 'em' or is missing ---
+            // If the element has no size, let's start it at 1em.
+            if (!currentSizeString || !currentSizeString.includes('em')) {
+                // If it's in px (the default for getComputedStyle), convert it to a number 
+                // and then set a new base in 'em'. For simplicity, let's use 1em as a base.
+                currentSizeString = '1em'; 
+            }
+            
+            // 2. Parse the number part (e.g., '1.0' from '1.0em')
+            let numericSize = parseFloat(currentSizeString);
+            
+            // 3. Perform the mathematical addition/subtraction
+            numericSize += sizeChange;
+            
+            // Optional: Clamp the size to prevent it from getting too small or too large
+            numericSize = Math.max(0.5, Math.min(3.0, numericSize)); // Limits between 0.5em and 3.0em
+
+            // 4. Re-apply the unit and set the new style
+            node.style.fontSize = `${numericSize}em`;
+            
+            console.log(`New font size for node: ${numericSize}em`);
+        });
+    }
+});*/
+        const testUniqueObj = {}
+        let uniqueWordNum = 0;
+        let uniquecharNum = 0;
+        let tChar = 0;
+        let tWord = 0;
+        let ANS = '';
+        let quest = '';
+        let isrendered = false;
+        let startTimer = false;
+        let ANS2 = false;
+        let cnum = 0;
+        let VER = '';
+        let QUEST = '';
+        let question_dict2 = allquestionsinquizapp;
+        let ver = null;
+        //console.log(allquestionsinquizapp)
+        let questions = allquestionsinquizapp.filter((Verse, i) => {
+            let Test = quizSettings.months.includes(Verse.month) && quizSettings.flights.includes(Verse.flight) && quizSettings.quizMode.includes(Verse.type) && quizSettings.chapters.includes(Verse.chapter)
+                            if( i==10){
+                            const isMonthIncluded = quizSettings.months.includes(Verse.month); // Checks the first condition: month inclusion
+                            console.log("Month Inclusion Check:", isMonthIncluded);
+                            
+                            // 2. Check if the Verse flight is included in the allowed flights
+                            const isFlightIncluded = quizSettings.flights.includes(Verse.flight); // Checks the second condition: flight inclusion
+                            console.log("Flight Inclusion Check:", isFlightIncluded, Verse);
+                            
+                            // 3. Check if the Verse type is included in the allowed quiz modes
+                            const isQuizModeIncluded = quizSettings.quizMode.includes(Verse.type); // Checks the third condition: quiz mode inclusion
+                            console.log("Quiz Mode Inclusion Check:", isQuizModeIncluded);
+                            
+                            // 4. Check if the Verse chapter is included in the allowed chapters
+                            const isChapterIncluded = quizSettings.chapters.includes(Verse.chapter); // Checks the fourth condition: chapter inclusion
+                            console.log("Chapter Inclusion Check:", isChapterIncluded);
+                            
+                            // 5. The final overall result of the original statement
+                            const test = isMonthIncluded && isFlightIncluded && isQuizModeIncluded && isChapterIncluded; // Combine the results to get the final boolean value
+                            console.log("Final Test Result:", test);
+                            }
+                            //if(!Test) console.warn(Verse)
+                            return Test;
+                                
+                
+                        })
+
+
+        //need to filter out based on settings 
+        if (quizSettings.verseSelection === "randomByChps") {
+            let sortedRandChps = []
+            for (const chp of quizSettings.chapters) {
+                const setOfQsbyChp = questions.filter(V => V.chapter.includes(chp));
+                const randQbyChps = Quiz.shuffleArray(setOfQsbyChp);
+                sortedRandChps = [...sortedRandChps, ...randQbyChps]
+                Quiz.delog(sortedRandChps)
+
+
+            }
+            Quiz.delog(sortedRandChps)
+            questions = sortedRandChps
+        }
+        if (quizSettings.verseSelection === "random") {
+            questions = Quiz.shuffleArray(questions)
+        }if(quizSettings.verseSelection === "alphabet"){
+                        questions= Quiz.sortBy(questions);
+                    }
+
+        // Comment: Dummy data structure for testing the print function
+        const MOCK_QUESTIONS = [
+            {
+                verse: "Matthew 1:02",
+                flight: "C",
+                question: "Who was the father of Isaac?",
+                answer: "Abraham"
+            },
+            {
+                verse: "Matthew 1:22-23",
+                flight: "A",
+                question: "According to Matthew 1:22-23, what had the Lord spoken by the prophet?",
+                answer: "\"Behold, the virgin shall conceive and bear a son, and they shall call his name Immanuel\""
+            },
+            {
+                verse: "Matthew 2:16",
+                flight: "T",
+                question: "Who did Herod have killed?",
+                answer: "All the male children in Bethlehem and in all that region who were two years old or under, according to the time that he had ascertained from the wise men."
+            },
+            {
+                ref: "Matthew 2:06",
+                flight: "B",
+                verse: "Who are by no means least among the rulers of Judah?",
+                answer: "Bethlehem."
+            }
+        ];
+      //  toggleBtn.addEventListener('click', () => {
+    // Comment: 3. Toggle the CSS class 'hide-grid-lines' on the main print container.
+    // When the class is added, the grid lines disappear (as defined in CSS).
+   /// document.getElementById('printArea').classList.toggle('hide-grid-lines'); 
+
+    // Comment: 4. Check if the class is now present (meaning lines are hidden).
+   /// const isHidden = document.getElementById('printArea').classList.contains('hide-grid-lines');
+    
+    // Comment: 5. Update the button text to reflect the action of the *next* click.
+  ///  toggleBtn.textContent = isHidden ? 'Show Grid Lines' : 'Hide Grid Lines'; 
+//});
+        const printBtn = document.getElementById('printBtn');
+        async function loadVerseDicts(inquestions) {
+            const { figureMonths } = Quiz.hightestMonth(quizSettings.months)
+
+            const allQuotesFtvs = Quiz.fliterOutQs(Object.values(allQs), { m: figureMonths, f: quizSettings.selectedFlights, t: ['ftv/quote'] })
+            const allQuestions = Quiz.fliterOutQs(Object.values(allQs), { m: figureMonths, f: quizSettings.selectedFlights, t: ['question', 'SQ:', 'According to'] })
+            const quoteRefArr = allQuotesFtvs.map(Verse => Verse.ref);
+            Quiz.delog(Object.values(allQs, 'verse dicts'));
+
+
+            //Quiz.delog(allQuotesFtvs);
+
+            //const quoteRefArr = inquestions.map(Verse => Verse.ref);
+            Quiz.delog(allQuestions, allQuotesFtvs, quoteRefArr);
+            return { allQuestions, allQuotesFtvs, quoteRefArr }
+        }
+        /**
+             * Generates the HTML content for printing, structured in a grid layout.
+             * @param {Array<Object>} questions - An array of question objects to print.
+             * @returns {string} The fully formed HTML content string.
+             *   async function loadVerseDicts() {
+                                     const figureMonths = hightestMonth(quizSettings.months)
+                            verse_dict2 = fliterOutQs(Object.values(verse_dict), {m: figureMonths, f: quizSettings.selectedFlights, t: ['ftv/quote']})
+                            
+                            delog('question_dict', '2');
+                            question_dict2 = fliterOutQs(Object.values(verse_dict), {m: figureMonths, f: quizSettings.selectedFlights, t: ['question', 'According to', 'SQ:']})
+                            
+                            quoteRefArr = verse_dict2.map(Verse => Verse.ref);
+                            delog(question_dict2, verse_dict2, quoteRefArr, Object.values(verse_dict, 'verse dicts'));
+                        }
+             */
+/**
+ * Handles loading styles, hiding/showing elements, and displaying questions dynamically.
+ * @param {boolean} isLoading - Whether to show or hide the loading box.
+ * @param {HTMLElement} loadingBox - The loading box element.
+ * @param {HTMLElement} appContainer - The main app container to hide/show.
+ * @param {HTMLElement} printArea - The print area container to hide/show.
+ * @param {Array<Object>} questions - Array of questions to display randomly during loading.
+ * @param {number} progress - The current progress percentage (0-100).
+ */
+ function handleLoading(isLoading, loadingBox, appContainer, printArea, questionse = [], progress = 0) {
+    if (isLoading) {
+        // Show loading box and hide other elements
+        appContainer.style.display = 'none';
+        printArea.style.display = 'none';
+        loadingBox.style.display = 'flex';
+
+        // Update loading box content
+        loadingBox.innerHTML = `
+            <div class="loading-content">
+                <h2>Loading Questions...</h2>
+                <p id="loading-progress">${progress}%</p>
+                <p id="random-question"></p>
+            </div>
+        `;
+
+        const randomQuestionElement = document.getElementById('random-question');
+        let questions = questionse.filter(v=>v.type!=='ftv/quote')
+        // Display a random question
+        // Display random questions dynamically
+        let intervalId = setInterval(() => {
+            if (!isLoading) {
+                clearInterval(intervalId);
+                return;
+            }
+
+            if (questions.length > 0) {
+                const randomIndex = Math.floor(Math.random() * questions.length);
+                const randomQuestion = questions[randomIndex];
+                randomQuestionElement.textContent = `Question: ${randomQuestion.verse.split('?')[0]}?\n\nAnswer: ${randomQuestion.verse.split('?')[1]}`;
+            }
+        }, 2000);
+    } else {
+        // Hide loading box and show other elements
+        loadingBox.style.display = 'none';
+        appContainer.style.display = 'block';
+        printArea.style.display = 'block';
+    }
+}
+ 
+   
+
+        async function generatePrintContent(inquestions) {
+            const loadingBox = document.getElementById('load');
+    const appContainer = document.getElementById('appContainer');
+    const printArea = document.getElementById('printArea');
+
+    // Show loading box
+    handleLoading(true, loadingBox, appContainer, printArea, inquestions, 0);
+            // Comment: Create the printable header with metadata
+            let htmlContent = '';
+            htmlContent += `
+                <div class="print-header">
+                    <div class="print-title">Bible Quizzing Questions for Study</div>
+                    <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p><strong>Source:</strong> Print Questions Program</p>
+                    <p><strong>Columns:</strong> Verse Reference, Flight Type , Question, Answer/Verse.</p>
+                  <div class="month-name">  <!-- OCTOBER -->
+                    <!-- OCTOBER -->
+                <div class="flex items-center space-x-2">
+                    <div class="color-swatch-october h-4 w-4 rounded-sm shadow"></div>
+                    <span class="text-sm font-medium text-gray-600">October</span>
+                </div>
+
+                <!-- NOVEMBER -->
+                <div class="flex items-center space-x-2">
+                    <div class="color-swatch-november h-4 w-4 rounded-sm shadow"></div>
+                    <span class="text-sm font-medium text-gray-600">November</span>
+                </div>
+                
+                <!-- DECEMBER -->
+                <div class="flex items-center space-x-2">
+                    <div class="color-swatch-december h-4 w-4 rounded-sm shadow"></div>
+                    <span class="text-sm font-medium text-gray-600">December</span>
+                </div>
+
+                <!-- JANUARY -->
+                <div class="flex items-center space-x-2">
+                    <div class="color-swatch-january h-4 w-4 rounded-sm shadow"></div>
+                    <span class="text-sm font-medium text-gray-600">January</span>
+                </div>
+                
+                <!-- FEBRUARY -->
+                <div class="flex items-center space-x-2">
+                    <div class="color-swatch-february h-4 w-4 rounded-sm shadow"></div>
+                    <span class="text-sm font-medium text-gray-600">February</span>
+                </div>
+                
+                <!-- MARCH -->
+                <div class="flex items-center space-x-2">
+                    <div class="color-swatch-march h-4 w-4 rounded-sm shadow"></div>
+                    <span class="text-sm font-medium text-gray-600">March</span>
+                </div>
+                </div>            
+                </div>
+            `;
+
+            htmlContent += '<div class="questions-grid">'; // Comment: Start the questions grid container
+
+            // Comment: Define and add the column headers
+            const headers = [
+                "Verse Reference",
+                "Flight",
+                "Question",
+                "Answer/Verse"
+            ];
+
+            headers.forEach((header) => {
+                htmlContent += `<div class="grid-header">${header}</div>`; // Comment: Add each column header to the grid
+            });
+
+            // Comment: Loop through all the mock question data to create rows
+            printBtn.textContent = 'Initializing Questions...';
+            ({ allQs } = JSON.parse(localStorage.getItem('allQuestions') || JSON.stringify(await Quiz.initializeQuiz()))  ) 
+            printBtn.textContent = 'Loading Question...';
+           /// verse_dict = allQs
+            console.log('all', allQs)
+            const { allQuestions, allQuotesFtvs, quoteRefArr } = await loadVerseDicts(inquestions);
+            // (inquestions, 'inquestions', allQuestions, allQuotesFtvs, quoteRefArr)
+            let question = '';
+            let answer = '';
+            let uniqueNum = -1;
+            console.log(inquestions, 'inquestions')
+
+            let i = 0;
+            printBtn.disabled = true
+            printBtn.textContent = 'Displaying Questions...';
+            for (const q of inquestions) {
+                i++;
+                const percent = Math.floor((i / inquestions.length) * 100)
+                //handleLoading(true, loadingBox, appContainer, printArea, inquestions, percent);
+                uniqueNum = 0;
+                //let isFTV = false;
+                //console.log(q, 'q in loop')
+                let ref = q.ref;
+                if (q.type != 'ftv/quote') {
+                    // question = q.type === 'SQ:' ? `SQ: ${q.verse.split('?')[0]}?` : q.type === 'question' ? `${q.verse.split('?')[0]}?` :`According to ${q.verse.split('?')[0]}?` ;
+                    answer = q.verse.split('?')[1];
+                    //Quiz.delog('showing question')
+                    //console.log('question before trigger', question)
+                   // testUniqueObj.allqs = allQuestions
+                    const questionfortrig = `${q.verse.split('?')[0]}?`
+                    let { uniqueWordNum, htmlToDisplay } = await Quiz.setTrigForAllMonths(q,  allQuestions) //uiz.findUniqueTriggerWord(questionfortrig.split(' '), allQuestions, null, 'highlight-word', 'highlight-char')
+                    if (q.type === 'SQ:') htmlToDisplay = `${q.type} ${htmlToDisplay}`///uniquecharNum += 4;
+                    if (q.type === 'According to') htmlToDisplay = `<p>${q.type} ${htmlToDisplay}</p>`
+                    testUniqueObj[`Questions${question}`] = 'test'
+                    //const htmlForTriggr =  await settext(question, 'span', '', 0, false, uniqueWordNum, uniquecharNum); 
+                    question = htmlToDisplay;
+                    uniqueNum = uniqueWordNum;
+                } else {
+                    //console.log(q, 'quote')
+                    question = 'FTV/Quote';
+                    answer = q.verse;
+                    `const {uniquecharNum} =  await  Quiz.findUniqueTriggerWord(q.ref.split(' '), quoteRefArr, 'F', answer.split(' ').length)
+               // Quiz.delog('showing quote')
+               ref =  await settext(answer, 'span', '', 0, false, -1, uniquecharNum); `
+
+                    let htmlForTriggr;
+
+                    const { uniqueWordNum, uniquecharNum, htmlToDisplay } = await Quiz.findUniqueTriggerWord(answer.split(' '), allQuotesFtvs, null, 'highlight-word', 'highlight-char')
+
+                    //htmlForTriggr =  await settext(answer, 'span', '', 0, false, uniqueWordNum, uniquecharNum); 
+                    uniqueNum = uniqueWordNum
+                    answer = htmlToDisplay;
+                }
+                //Quiz.delog('htmlForTriggr', answer)
+
+
+                // Comment: Add the Verse Reference data (15% width)
+                htmlContent += `<!--newVerse--><!--#${uniqueNum}#--><div class="grid-item">${ref}</div>`;
+                //(q.ref, 'q.ref') 
+                // Comment: Add the Flight Type data (5% width)
+                htmlContent += `<div class="grid-item">${q.flight}</div>`;
+                //(q.flight, 'q.flight')
+                // Comment: Add the Question data (40% width)
+                htmlContent += `<div class="grid-item"><p>${question}</p></div>`;
+                //(question, 'question')
+                // Comment: Add the Answer/Verse data (40% width)
+                htmlContent += `<div class="grid-item"><p>${answer}</p>            </div>`;
+              
+            }
+
+            htmlContent += '</div>'; // Comment: Close the questions grid container
+            console.log(htmlContent, 'htmlContent')
+            printBtn.textContent = 'Print Now';
+            printBtn.disabled = false;
+            handleLoading(false, loadingBox, appContainer, printArea);
+            return htmlContent; // Comment: Return the complete HTML string
+        }
+
+        /**
+         * Main function to prepare and initiate the print process.
+         */
+        async function initPrintFunctionality() {
+            const printArea = document.getElementById('printArea'); // Comment: Get the designated area for print content
+
+            if (!printArea) {
+                console.error("Print area container not found."); // Comment: Log error if container is missing
+                return;
+            }
+
+            const questionsToPrint = questions || MOCK_QUESTIONS; // Comment: Use the mock data for printing
+
+            const content = await generatePrintContent(questionsToPrint) // Comment: Generate the HTML content
+            console.log(testUniqueObj)
+            printArea.innerHTML = content; // Comment: Insert the generated content into the print area
+
+            //window.print(); // Comment: Open the native browser print dialog
+        }
+
+        // Comment: Attach the event listener to the button on document load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const printBtn = document.getElementById('printBtn');
+            // Comment: Find the Print Questions button
+            await initPrintFunctionality();
+                
+            if (printBtn) {
+                printBtn.addEventListener('click', ()=>{window.print()})//console.log('test', testUniqueObj) // Comment: Attach the print function
+            }
+        });
+    </script>
+</body>
+
+</html>

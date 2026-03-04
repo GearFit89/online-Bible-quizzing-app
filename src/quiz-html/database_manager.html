@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal JSON Admin App</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f1f5f9;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #334155;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.5;
+        }
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .toolbar {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            align-items: center;
+        }
+        input, select, button, textarea {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #334155;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        textarea {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            min-height: 300px;
+            resize: vertical;
+            border: 2px solid var(--border);
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        textarea.valid-json { border-color: var(--success); }
+        textarea.invalid-json { border-color: var(--danger); }
+        
+        button {
+            cursor: pointer;
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 700;
+            border: none;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.98); }
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        th {
+            background: #0f172a;
+            color: var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        tr.clickable:hover {
+            background-color: #2d3e50;
+            cursor: pointer;
+        }
+        dialog {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 700px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+        dialog::backdrop {
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .carrot-world {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: orange;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .carrot-world.active {
+            display: flex;
+            animation: strobe 0.15s infinite;
+        }
+        @keyframes strobe {
+            0% { background: orange; } 33% { background: red; } 66% { background: yellow; } 100% { background: orange; }
+        }
+        .carrot-spin {
+            font-size: 120px;
+            animation: spin-fast 0.3s infinite linear;
+        }
+        @keyframes spin-fast { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>Database Manager</h1>
+    <div class="toolbar">
+        <button onclick="openFile()" style="background: var(--success)">📂 Open JSON</button>
+        <button onclick="saveFile()" style="background: #6366f1">💾 Save As</button>
+        <button onclick="showAddDialog()">➕ Add Row</button>
+        <button onclick="showEditRawAll()" style="background: #a855f7">📝 Edit Raw JSON</button>
+        <button onclick="showFilterDialog()" style="background: #94a3b8; color: #000">🔍 Filter</button>
+        <input type="text" id="searchInput" placeholder="Search values..." oninput="applyFilters()">
+        <select id="searchKey" onchange="applyFilters()"><option value="all">Search All Fields</option></select>
+        <button onclick="toggleCarrot()" style="background: #fb923c">🥕 CARROT</button>
+    </div>
+
+    <div class="table-wrap">
+        <table id="dataTable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal for Form-based Editing -->
+<dialog id="itemModal">
+    <h2 id="modalTitle">Edit Record</h2>
+    <form id="itemForm" class="form-group" method="dialog">
+        <div id="formFields" class="form-group"></div>
+        <div class="modal-actions">
+            <button type="button" onclick="closeDlg('itemModal')" style="background:#475569">Cancel</button>
+            <button type="submit" style="background:var(--success)">Save Entry</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Message & Raw JSON Editor Modal -->
+<dialog id="msgModal">
+    <h2 id="msgTitle">JSON Editor</h2>
+    <div class="form-group">
+        <label id="editorLabel">Raw Content:</label>
+        <textarea id="jsonEditorArea" spellcheck="false" oninput="validateJsonInput(this)"></textarea>
+    </div>
+    <div class="modal-actions">
+        <button onclick="closeDlg('msgModal')" style="background:#475569">Close</button>
+        <button id="applyJsonBtn" style="background: var(--success)">Apply Changes</button>
+    </div>
+</dialog>
+
+<!-- Delete Confirmation Modal -->
+<dialog id="confirmModal">
+    <h2>Confirm Deletion</h2>
+    <p>Are you certain you want to remove this record? This cannot be reversed.</p>
+    <div class="modal-actions">
+        <button onclick="closeDlg('confirmModal')" style="background:#475569">Keep It</button>
+        <button id="confirmDelBtn" style="background:var(--danger)">Yes, Delete</button>
+    </div>
+</dialog>
+
+<!-- Filter Options Modal -->
+<dialog id="filterModal">
+    <h2>Dynamic Filters</h2>
+    <div id="dynamicFilters" class="form-group"></div>
+    <div class="modal-actions">
+        <button onclick="clearFilters()" style="background:var(--danger)">Clear All</button>
+        <button onclick="closeDlg('filterModal')">Done</button>
+    </div>
+</dialog>
+
+<!-- Crazy Carrot World -->
+<div id="carrotScreen" class="carrot-world" onclick="toggleCarrot()">
+    <div class="carrot-spin">🥕</div>
+    <h1 style="color: white; font-size: 4rem; text-shadow: 2px 2px black;">CARROT OVERLOAD</h1>
+    <div class="carrot-spin">🥕</div>
+</div>
+
+<script>
+    let rawData = [];
+    let dataKeys = [];
+    let activeId = null;
+    let editMode = 'single';
+
+    // RFC 8259 compliant JSON Regex for basic structural check (Parser used for final)
+    const jsonRegex = /^[\],:{}\s]*$/;
+
+    window.onload = () => {
+        fetch('./questionsData.json')
+            .then(r => r.json())
+            .then(d => processNewData(d))
+            .catch(() => showRawEditor("Welcome", "[]", false));
+    };
+
+    function validateJsonInput(el) {
+        const val = el.value;
+        const label = document.getElementById('editorLabel');
+        const applyBtn = document.getElementById('applyJsonBtn');
+        
+        try {
+            if (val.trim() === "") throw new Error("Empty");
+            JSON.parse(val);
+            el.className = 'valid-json';
+            label.innerText = "Raw Content: (Valid JSON ✅)";
+            label.style.color = "var(--success)";
+            applyBtn.disabled = false;
+            applyBtn.style.opacity = "1";
+        } catch (e) {
+            el.className = 'invalid-json';
+            label.innerText = `Raw Content: (Invalid Syntax ❌)`;
+            label.style.color = "var(--danger)";
+            applyBtn.disabled = true;
+            applyBtn.style.opacity = "0.5";
+        }
+    }
+
+    function showRawEditor(title, content, showApply = true, mode = 'single', targetId = null) {
+        document.getElementById('msgTitle').innerText = title;
+        const editor = document.getElementById('jsonEditorArea');
+        editor.value = typeof content === 'object' ? JSON.stringify(content, null, 4) : content;
+        
+        validateJsonInput(editor);
+        
+        const applyBtn = document.getElementById('applyJsonBtn');
+        applyBtn.style.display = showApply ? 'block' : 'none';
+        
+        applyBtn.onclick = () => {
+            try {
+                const updated = JSON.parse(editor.value);
+                if (mode === 'all') {
+                    processNewData(updated);
+                } else if (mode === 'single' && targetId !== null) {
+                    const idx = rawData.findIndex(i => i.id == targetId);
+                    if (idx !== -1) {
+                        rawData[idx] = updated;
+                        drawTable(rawData);
+                    }
+                }
+                closeDlg('msgModal');
+            } catch (e) {
+                // Should be unreachable due to button disable, but kept as guard
+                alert("Invalid JSON format.");
+            }
+        };
+
+        document.getElementById('msgModal').showModal();
+    }
+
+    function showEditRawAll() {
+        showRawEditor("Global JSON Editor", rawData, true, 'all');
+    }
+
+    async function openFile() {
+        try {
+            const [handle] = await window.showOpenFilePicker();
+            const file = await handle.getFile();
+            const text = await file.text();
+            processNewData(JSON.parse(text));
+        } catch (e) { console.log("User cancelled file selection."); }
+    }
+
+    function processNewData(data) {
+        rawData = Array.isArray(data) ? data : [data];
+        if (rawData.length > 0) {
+            dataKeys = Object.keys(rawData[0]);
+            refreshInterface();
+            drawTable(rawData);
+        }
+    }
+
+    function refreshInterface() {
+        const sKey = document.getElementById('searchKey');
+        const fArea = document.getElementById('dynamicFilters');
+        sKey.innerHTML = '<option value="all">Search All Fields</option>';
+        fArea.innerHTML = '';
+
+        dataKeys.forEach(k => {
+            const opt = document.createElement('option');
+            opt.value = k; opt.textContent = `Field: ${k.toUpperCase()}`;
+            sKey.appendChild(opt);
+
+            const unique = [...new Set(rawData.map(i => i[k]))].filter(v => v !== undefined && v !== "").slice(0, 15);
+            if (unique.length > 0) {
+                fArea.innerHTML += `<label>${k.toUpperCase()}:</label><select id="filter-${k}" onchange="applyFilters()">
+                    <option value="">-- Show All --</option>
+                    ${unique.map(v => `<option value="${v}">${v}</option>`).join('')}
+                </select>`;
+            }
+        });
+    }
+
+    function drawTable(dataList) {
+        const h = document.getElementById('tableHead');
+        const b = document.getElementById('tableBody');
+        h.innerHTML = `<tr>${dataKeys.map(k => `<th>${k.toUpperCase()}</th>`).join('')}<th>ACTIONS</th></tr>`;
+        b.innerHTML = dataList.map(item => `
+            <tr class="clickable" onclick="showRawEditor('Edit Raw Record', ${JSON.stringify(item).replace(/"/g, '&quot;')}, true, 'single', ${item.id})">
+                ${dataKeys.map(k => `<td>${typeof item[k] === 'object' ? '[Object]' : item[k]}</td>`).join('')}
+                <td onclick="event.stopPropagation()">
+                    <button onclick="showEditDialog(${item.id})">Edit</button>
+                    <button onclick="requestDelete(${item.id})" style="background:var(--danger)">Del</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function showAddDialog() {
+        activeId = null;
+        document.getElementById('modalTitle').innerText = "Add New Record";
+        document.getElementById('formFields').innerHTML = dataKeys.map(k => `
+            <label>${k.toUpperCase()}:</label><input type="text" name="${k}" required>
+        `).join('');
+        document.getElementById('itemModal').showModal();
+    }
+
+    function showEditDialog(id) {
+        activeId = id;
+        const entry = rawData.find(i => i.id == id);
+        document.getElementById('modalTitle').innerText = "Edit Record";
+        document.getElementById('formFields').innerHTML = dataKeys.map(k => `
+            <label>${k.toUpperCase()}:</label><input type="text" name="${k}" value="${entry[k] || ''}" ${k === 'id' ? 'readonly' : ''}>
+        `).join('');
+        document.getElementById('itemModal').showModal();
+    }
+
+    document.getElementById('itemForm').onsubmit = (e) => {
+        const fData = new FormData(e.target);
+        const updatedItem = Object.fromEntries(fData.entries());
+        if (activeId !== null) {
+            const idx = rawData.findIndex(i => i.id == activeId);
+            rawData[idx] = updatedItem;
+        } else {
+            rawData.push(updatedItem);
+        }
+        drawTable(rawData);
+    };
+
+    function requestDelete(id) {
+        const cModal = document.getElementById('confirmModal');
+        document.getElementById('confirmDelBtn').onclick = () => {
+            rawData = rawData.filter(i => i.id != id);
+            drawTable(rawData);
+            cModal.close();
+        };
+        cModal.showModal();
+    }
+
+    function applyFilters() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const sk = document.getElementById('searchKey').value;
+        const result = rawData.filter(item => {
+            const sMatch = sk === 'all' 
+                ? Object.values(item).some(v => String(v).toLowerCase().includes(q)) 
+                : String(item[sk]).toLowerCase().includes(q);
+            const fMatch = dataKeys.every(k => {
+                const el = document.getElementById(`filter-${k}`);
+                return !el || el.value === "" || String(item[k]) === el.value;
+            });
+            return sMatch && fMatch;
+        });
+        drawTable(result);
+    }
+
+    function clearFilters() {
+        dataKeys.forEach(k => {
+            const el = document.getElementById(`filter-${k}`);
+            if (el) el.value = "";
+        });
+        applyFilters();
+    }
+
+    async function saveFile() {
+        try {
+            const handle = await window.showSaveFilePicker({ suggestedName: 'database_export.json' });
+            const stream = await handle.createWritable();
+            await stream.write(JSON.stringify(rawData, null, 4));
+            await stream.close();
+        } catch (e) { console.log("Save cancelled."); }
+    }
+
+    function closeDlg(id) { document.getElementById(id).close(); }
+    function showFilterDialog() { document.getElementById('filterModal').showModal(); }
+    function toggleCarrot() { document.getElementById('carrotScreen').classList.toggle('active'); }
+</script>
+</body>
+</html>

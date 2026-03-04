@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="set"></div>
+
+    <script type="module">
+        //import {QuizCompanion} from './main.js';
+        import {setQuizSetings, SETTINGSHTML, QuizCompanion} from './main.js';
+        document.addEventListener('DOMContentLoaded', () => {
+        // Create a new instance of QuizCampaign
+        const qz = new QuizCompanion();
+       const set = document.getElementById('set')
+       set.innerHTML = SETTINGSHTML;
+       const btn2 = document.getElementById("startQuizButton2" )
+       const btn = document.getElementById("startQuizButton" )
+       const com= '<!--n-->'
+      
+       btn.textContent = 'SAve Settings';
+       const extras = document.querySelectorAll('.extra');
+       extras.forEach(element => {
+            element.style.display = 'none';
+        });
+     
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault()
+        const quizsettings = setQuizSetings(qz);
+
+
+console.log(quizsettings);
+window.open("PageToPrintQuestion.html", '_blank'); ;
+      })
+      
+        
+    })
+    </script>
+</body>
+</html>

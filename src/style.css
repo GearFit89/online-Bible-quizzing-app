@@ -1,0 +1,1508 @@
+/*  General Body Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5; /* Fallback color */
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background-image: url("http://googleusercontent.com/image_generation_content/1"); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    width: 100%;
+    box-sizing: border-box;
+}
+.correct1 {
+    background-color: #28a745; 
+    display: none;
+
+}
+
+.incorrect1 {
+    background-color: #dc3547;
+    display: none;
+}
+/* Start Scene Styling */
+.start-scene-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.start-scene-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 20, 50, 0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+.start-scene-card:hover {
+    transform: translateY(-5px);
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+}
+
+.option-section {
+    text-align: left;
+    margin-bottom: 25px;
+    border-top: 1px solid #ecf0f1;
+    padding-top: 25px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #34495e;
+    margin: 0 0 15px;
+}
+
+/* Custom Radio Button Styling */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #34495e;
+    user-select: none;
+}
+
+.radio-label input[type="radio"] {
+    display: none;
+}
+
+.radio-custom {
+    height: 20px;
+    width: 20px;
+    background-color: #ecf0f1;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+    position: relative;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom {
+    background-color: #3498db;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.3);
+}
+
+.radio-custom::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom::after {
+    display: block;
+}
+
+/* Custom Checkbox (Toggle) Styling */
+.checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.toggle-label {
+    cursor: pointer;
+    font-size: 16px;
+    color: #34495e;
+    padding: 10px 20px;
+    background-color: #ecf0f1;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-label:has(input:checked) {
+    background-color: #3498db;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+/* Main Start Button */
+#startQuizButton {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* --- Revised Quiz Container Styles --- */
+
+.quiz-container {
+    width: 100%;
+    max-width: 800px;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.quiz-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 20, 50, 0.15);
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-height: auto;
+    box-sizing: border-box;
+}
+
+.quiz-header-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.timer-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #34495e;
+    background-color: #f8f9fa;
+    border-radius: 50px;
+    padding: 8px 16px;
+    min-width: 100px;
+    text-align: center;
+    border: 2px solid #ddd;
+}
+
+.fallback-message {
+    font-size: 24px;
+    font-weight: 500;
+    color: #2c3e50;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+.quiz-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* Mobile First Responsive Styles */
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .quiz-container {
+        padding: 10px;
+        min-height: auto;
+        justify-content: flex-start;
+    }
+    
+    .quiz-card {
+        padding: 20px;
+        margin: 0;
+        width: 100%;
+        min-height: auto;
+    }
+    
+    .quiz-header-area {
+        margin-bottom: 20px;
+    }
+    
+    .button {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .answer-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quiz-container {
+        padding: 8px;
+    }
+    
+    .quiz-card {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    .button {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    .questCard {
+        padding: 12px;
+        margin: 8px 0;
+        min-height: auto;
+    }
+    
+    .questCard h3 {
+        font-size: 14px;
+    }
+    
+    .questCard p {
+        font-size: 13px;
+    }
+}
+
+
+
+.button {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #3498db; 
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+    background-color: #2471a3;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.questCard {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+.questCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.questCard h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.questCard p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.correct-icon, .incorrect-icon {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.correct-icon {
+    color: #27ae60;
+}
+
+.incorrect-icon {
+    color: #e74c3c;
+}
+
+.answer-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: default;
+    transition: background-color 0.3s;
+    display: none;
+}
+.blueborder{
+    border: 2px solid #0c91c5;
+}
+
+.orange {
+    background-color: orange;
+    display: none;
+}
+/* Progress Bar Styling */
+.progress-container {
+    width: 90%;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 15px;
+    height: 15px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #3498db; /* A vibrant blue */
+    border-radius: 15px;
+    transition: width 0.4s ease-in-out;
+}
+#restart{
+    
+    display: none;
+}
+a {
+    text-decoration: none;
+    color: white;
+  }
+  .highlight-word {
+    color: #3498db;
+
+  }
+  .highlight-char{
+    color: orange;
+  }
+  .black{
+    background-color: black;
+    display: none;
+  }
+  
+
+.draggable-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* Allows the blocks to wrap to the next line */
+    justify-content: center;
+    gap: 1px;
+}
+/* New CSS for drag zones */
+.drag-zone {
+    /* Adds a dashed border to the drag zones. */
+    border: 2px dashed #95a5a6;
+    /* Adds rounded corners. */
+    border-radius: 10px;
+    /* Adds padding inside the drag zones. */
+    padding: 20px;
+    /* Sets a minimum height to prevent shrinking when empty. */
+    min-height: 100px;
+    /* Makes the drag zones take up the full width. */
+    width: 100%;
+    /* Adds a top margin. */
+    margin-top: 20px;
+    /* Makes the drag zones flexible containers. */
+    display: flex;
+    /* Allows the items to wrap to the next line. */
+    flex-wrap: wrap;
+    /* Adds space between draggable items. */
+    gap: 1px;
+    /* Centers the items horizontally. */
+    justify-content: center;
+    /* Centers the items vertically. */
+    align-items: center;
+    /* Sets a light gray background. */
+    background-color: #ecf0f1;
+    /* Adds a smooth transition for the background color. */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Styling for the draggable word buttons. */
+.draggable-block {
+    background-color: #3498db;
+    /* A friendly blue color. */
+    color: white;
+    /* White text for contrast. */
+    padding: 1% 2%;
+    /* Ample padding for a good button size. */
+    margin: 3px; 
+    /* Space between each button. */
+    border-radius: 25px;
+    /* Fully rounded corners for a modern "pill" shape. */
+    border: none;
+    /* Remove the default button border. */
+    font-size: 18px;
+    /* A comfortable font size for readability. */
+    font-weight: 500;
+    /* Medium font weight. */
+    cursor: grab;
+    /* Changes cursor to indicate it's draggable. */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Smooth transitions for hover effects. */
+    user-select: none;
+    /* Prevents text selection on the button. */
+}
+
+/* Hover effect for the draggable words. */
+.draggable-block:hover {
+    /* Slightly lifts the button on hover. */
+    transform: translateY(-3px);
+    /* Adds a soft shadow for depth. */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for the container where the words are initially placed. */
+#verse-con {
+    min-height: 100px;
+    /* Ensures the container has a visible height. */
+    border: 2px dashed #bdc3c7;
+    /* A dashed line to suggest this is a starting area. */
+    background-color: #ecf0f1;
+    /* A light gray background. */
+    border-radius: 12px;
+    /* Slightly rounded corners. */
+    margin-bottom: 20px;
+    /* Spacing below the container. */
+    padding: 15px;
+    /* Padding inside the container. */
+}
+
+/* Styling for the drop zone where the user will build the sentence. */
+#versedrop {
+    min-height: 100px;
+    
+    /* Ensures a visible height. */
+   
+    /* A solid green border to make it stand out. */
+    background-color: #e8f8f5;
+    /* A light green background. */
+    border-radius: 12px;
+    /* Rounded corners. */
+    padding: 15px;
+    /* Inner padding. */
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+    /* A subtle green glow to indicate it is the target. */
+    margin-bottom: 20px;
+}
+
+/* Style for when a block is being dragged */
+.is-dragging {
+    /* Makes the block slightly transparent when dragging. */
+    opacity: 0.7;
+    /* Changes the cursor to a grabbing hand. */
+    cursor: grabbing;
+}
+
+/* Style for the hover state of the drop zone */
+.drag-zone:hover {
+    /* Changes the background color on hover. */
+    background-color: #dfe6e9;
+}
+
+/* Style for the active drop zone */
+.drag-zone.drag-over {
+    /* Sets a different background color when an item is dragged over it. */
+    background-color: #c7ecee;
+    /* Changes the border color to blue. */
+    border-color: #3498db;
+}
+/* Styling for the modal backdrop and the modal itself. */
+dialog.modal {
+    /* Using the 'dialog' tag's built-in show/hide functionality. */
+    border: none;
+    /* Removes the default border. */
+    border-radius: 16px;
+    /* Rounds the corners of the pop-up. */
+    padding: 40px;
+    /* Adds internal space around the content. */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    /* Adds a soft shadow for a floating effect. */
+    max-width: 500px;
+    /* Sets the maximum width of the pop-up. */
+    margin: auto;
+    /* Centers the pop-up horizontally and vertically. */
+}
+
+/* This pseudo-element styles the semi-transparent overlay behind the pop-up. */
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Creates a dark, transparent background. */
+}
+
+/* You can also style the content inside the modal. */
+.modal-content {
+    text-align: center;
+    /* Centers the text and button. */
+}
+input[type='number'] {
+    width: 100%;
+    padding: 10px 12px;
+    /* Adds internal spacing. */
+    border-radius: 8px;
+    /* Rounds the corners. */
+    border: 1px solid #ccc;
+    /* Sets a light gray border. */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    /* Sets the font size. */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Adds smooth transitions. */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Adds a subtle inner shadow. */
+  }
+  
+  input[type='number']:focus {
+    outline: none;
+    /* Removes the default focus outline. */
+    border-color: #3498db;
+    /* Changes the border color on focus. */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 8px rgba(52, 152, 219, 0.2);
+    /* Adds a blue glow on focus. */
+  }
+  /* Style the range input (for a sleek, modern look) */
+/* Style the range input for a sleek, modern look */
+input[type='range'] {
+    /* Set basic dimensions and appearance. */
+    -webkit-appearance: none; /* For Chrome, Safari, etc. */
+    appearance: none; /* The standard property for all other browsers. */
+    width: 100%;
+    height: 8px;
+    background: #dfe6e9; /* A soft, light-gray track. */
+    border-radius: 4px;
+    outline: none; /* Remove the outline on focus. */
+    transition: background 0.2s ease-in-out;
+  }
+  /* Style the track (the bar the thumb slides on). */
+  /* Chrome, Safari, and Edge. */
+  input[type='range']::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    background: #dfe6e9;
+    border-radius: 4px;
+  }
+  
+  /* Firefox */
+  input[type='range']::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: #dfe6e9;
+    border-radius: 4px;
+  }
+  
+  /* Style the thumb (the draggable circle or square). */
+  /* Chrome, Safari, and Edge. */
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Removes the default thumb style. */
+    height: 20px;
+    /* Set the height of the thumb. */
+    width: 20px;
+    /* Set the width of the thumb. */
+    border-radius: 50%;
+    /* Makes the thumb a circle. */
+    background: #3498db;
+    /* A nice blue color for the thumb. */
+    cursor: pointer;
+    /* Changes the cursor to a pointer when hovering over it. */
+    margin-top: -6px;
+    /* Adjusts the vertical position to center it on the track. */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow. */
+  }
+  
+  /* Firefox */
+  input[type='range']::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  input[type='number'] {
+    width: 100%;
+    padding: 10px 12px;
+    /* Adds internal spacing. */
+    border-radius: 8px;
+    /* Rounds the corners. */
+    border: 1px solid #ccc;
+    /* Sets a light gray border. */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    /* Sets the font size. */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Adds smooth transitions. */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Adds a subtle inner shadow. */
+  }
+  
+  input[type='number']:focus {
+    outline: none;
+    /* Removes the default focus outline. */
+    border-color: #3498db;
+    /* Changes the border color on focus. */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 8px rgba(52, 152, 219, 0.2);
+    /* Adds a blue glow on focus. */
+  }
+  /* Container for the range input and its value display. */
+.range-display-container {
+    /* Use Flexbox to align the range input and the value. */
+    display: flex;
+    align-items: center; /* Vertically centers the items. */
+    gap: 15px; /* Adds space between the range and the number. */
+    width: 100%; /* Ensures the container takes up the full width. */
+}
+
+/* Style for the span that displays the value. */
+#speedValue {
+    /* Sets the font size. */
+    font-size: 1.2rem;
+    /* Makes the text bold. */
+    font-weight: 500;
+    /* Sets the color. */
+    color: #34495e;
+    /* Ensures the text doesn't shrink. */
+    flex-shrink: 0;
+    /* Adds some space to the right. */
+    min-width: 30px;
+    text-align: right;
+}
+#versedrop.correct {
+    border: 2px solid #27ae60;
+    
+    border-radius: 12px;
+}
+
+#versedrop.incorrect {
+    border: 2px solid #e74c3c;
+    
+    border-radius: 12px;
+}
+#verse-con.correct {
+    border: 2px solid #27ae60;
+    
+    border-radius: 12px;
+}
+
+#verse-con.incorrect {
+    border: 2px solid #e74c3c;
+    
+    border-radius: 12px;
+}
+#verse.correct {
+    border: 2px solid #27ae60;
+    
+    border-radius: 12px;
+}
+
+#verse.incorrect {
+    border: 2px solid #e74c3c;
+    
+    border-radius: 12px;
+}
+/* Hides the default radio input. */
+.radio-input {
+    display: none;
+}
+
+/* Custom radio button styling. */
+.custom-radio {
+    /* Sets the size of the custom radio button. */
+    width: 20px;
+    height: 20px;
+    /* Creates a circular shape. */
+    border-radius: 50%;
+    /* Adds a border. */
+    border: 2px solid #bdc3c7;
+    /* Sets the background color. */
+    background-color: #ecf0f1;
+    /* Ensures the element doesn't shrink. */
+    flex-shrink: 0;
+    /* Adds a small space to the right of the button. */
+    margin-right: 10px;
+    /* Adds a smooth transition for the color change. */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Styles the custom radio button when it's checked. */
+.radio-input:checked + .custom-radio {
+    /* Changes the background color when checked. */
+    background-color: #3498db;
+    /* Adds a border color when checked. */
+    border-color: #2980b9;
+    /* Adds a subtle shadow. */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Adds a small inner circle to the custom radio when it's checked. */
+.radio-input:checked + .custom-radio::after {
+    /* Creates the pseudo-element. */
+    content: '';
+    /* Positions the pseudo-element in the center of the radio button. */
+    position: relative;
+    top: 50%;
+    left: 50%;
+    /* Sets the size of the inner circle. */
+    width: 10px;
+    height: 10px;
+    /* Creates a circular shape. */
+    border-radius: 50%;
+    /* Sets the background color to white. */
+    background: white;
+    /* Positions the inner circle. */
+    transform: translate(-50%, -50%);
+    /* Adds a smooth transition for the appearance of the inner circle. */
+    transition: all 0.2s ease-in-out;
+}
+#questionNumber {
+    /* Positions the element in the top-right corner. */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    /* Sets the size of the circle. */
+    width: 40px;
+    height: 40px;
+    /* Creates a circular shape. */
+    border-radius: 50%;
+    /* Sets the background color. */
+    background-color: #3498db;
+    /* Sets the text color. */
+    color: white;
+    /* Centers the number inside the circle using flexbox. */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Sets the font size and weight. */
+    font-size: 1.2rem;
+    font-weight: bold;
+    /* Adds a subtle shadow for a 3D effect. */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+/* Targets the container holding the chapter/month checkboxes */
+/* Comment: Styles for the Microphone Button (micBtn) - UPDATED STYLES */
+.micBtn {
+    padding: 8px 15px; /* Comment: Reduced padding for a smaller button height */
+    width: 100%; /* Comment: Full width (matching the verse/question container width) */
+    background-color: white; /* Comment: White background */
+    color: #4f46e5; /* Comment: Blue text color */
+    border: 2px solid #4f46e5; /* Comment: Blue border */
+    border-radius: 25px; /* Comment: Highly rounded corners (pill shape) */
+    cursor: pointer; /* Comment: Pointer cursor */
+    font-size: 1em; /* Comment: Font size */
+    font-weight: 700; /* Comment: Bold font weight */
+    transition: background-color 0.2s, transform 0.1s; /* Comment: Smooth transitions */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Comment: Subtle box shadow */
+    margin: 15px 0 15px 0; /* Comment: Added margin to separate it from other elements (top/bottom) */
+    text-transform: uppercase; /* Comment: Professional touch */
+    display: flex; /* Comment: Use flexbox to align icon and text */
+    align-items: center; /* Comment: Center items vertically */
+    justify-content: center; /* Comment: Center items horizontally */
+    gap: 8px; /* Comment: Space between icon and text */
+    height: 40px; /* Comment: Fixed small height */
+}
+
+.micBtn:hover {
+    background-color: #f0f2f5; /* Comment: Light background on hover */
+}
+
+.micBtn:active {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Comment: Pressed effect */
+    transform: translateY(1px); /* Comment: Slight movement down */
+}
+
+.micBtn svg {
+    stroke: #4f46e5; /* Comment: Ensure the mic icon is blue */
+    width: 18px; /* Comment: Smaller icon size */
+    height: 18px; /* Comment: Smaller icon size */
+}
+
+/* Comment: Styles when listening (dynamic class added by JS) */
+.micBtn.listening {
+    background-color: #4f46e5; /* Comment: Solid blue background when listening */
+    color: white; /* Comment: White text when listening */
+    border-color: #4f46e5; /* Comment: Solid blue border when listening */
+    animation: pulse 1s infinite; /* Comment: Add a pulsing animation */
+}
+
+.micBtn.listening svg {
+    stroke: white; /* Comment: White mic icon when listening */
+}
+
+/* Comment: Keyframe animation for the pulse effect when listening */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+    }
+}
+/* Print Button Link Styling */
+.print-button-link {
+    background-color: #6b7280; /* Gray color for utility action */
+    box-shadow: 0 4px #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px; /* Square shape for the icon button */
+    flex-grow: 0; /* Don't force growth */
+}
+.print-button-link:hover {
+    background-color: #4b5563;
+}
+.print-button-link svg {
+    stroke: white;
+}
+/* Comment: Styles for the Settings Icon Button */
+.settings-icon-btn {
+    /* Comment: Position the button absolutely in the top-left corner */
+    position: absolute;
+    top: 15px; /* Comment: Distance from the top edge */
+    left: 15px; /* Comment: Distance from the left edge */
+    
+    background: none; /* Comment: No background by default */
+    border: none; /* Comment: No border */
+    cursor: pointer; /* Comment: Pointer cursor on hover */
+    padding: 8px; /* Comment: Padding for a good click area */
+    border-radius: 50%; /* Comment: Make it circular */
+    
+    /* Comment: Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out; 
+    
+    /* Comment: Ensure it sits on top of other content */
+    z-index: 10;
+}
+
+/* Comment: Styles for the SVG icon itself */
+.settings-icon-btn svg {
+    /* Comment: Sets the icon color (a subtle gray) */
+    stroke: #9ca3af; 
+    width: 20px; /* Comment: Icon size */
+    height: 20px; /* Comment: Icon size */
+    transition: stroke 0.2s ease-in-out; /* Comment: Smooth color change */
+}
+
+/* Comment: Hover effect: change color and add a subtle background */
+.settings-icon-btn:hover {
+    background-color: #f3f4f6; /* Comment: Light background on hover */
+}
+
+.settings-icon-btn:hover svg {
+    stroke: #4f46e5; /* Comment: Change icon color to indigo on hover */
+}
+#quiz-timer2 {
+    /* Define the size of the circular timer (120px by 120px). */
+    width: 120px; 
+    /* Define the height of the circular timer. */
+    height: 120px;
+    /* Make the element perfectly circular. */
+    border-radius: 50%; 
+    /* Use Flexbox to center the contents horizontally and vertically. */
+    display: flex;
+    /* Center items along the main axis (horizontal). */
+    justify-content: center;
+    /* Center items along the cross axis (vertical). */
+    align-items: center;
+    /* Define a custom property for the fill percentage, starting at 0%. */
+    --fill-percent: 0%; 
+    
+    /* Use conic-gradient for the filling effect, based on the --fill-percent variable. */
+    background: conic-gradient(
+        /* Color the filled portion (Green), defined by --fill-percent. */
+        rgb(76, 175, 80) 0% var(--fill-percent), 
+        /* Color the empty portion (Light Gray), starting where the fill ends. */
+        #e0e0e0 var(--fill-percent) 100% 
+    );
+
+    /* Use a mask to create a hollow effect (a donut shape) for the progress bar. */
+    mask: radial-gradient(
+        /* Start the gradient from the center. */
+        farthest-side, 
+        /* Make the center transparent (calc(100% - 15px) is the hole size). */
+        transparent calc(100% - 15px), 
+        /* Make the outer ring solid (#000) where the gradient is visible. */
+        #000 calc(100% - 15px)
+    );
+}
+
+/* Style for the central text display (now containing only the large number). */
+.timer-display2 {
+    /* Ensure the text is rendered on top of the mask/background. */
+    z-index: 2; 
+    /* Use flex to ensure the large number is perfectly centered. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Set the color for the text. */
+    color: #4b5563; /* Tailwind gray-700 */
+}
+#review{
+    border-radius: 16px;
+    border-color:black ;
+    height: 250px;
+    overflow: scroll;
+    display: flex;
+    
+    flex-wrap: wrap;
+}
+#review > :nth-child(odd){
+    background-color:lightgray;
+} 
+#startreview{
+    display: none;
+    width: 100%;
+    
+}
+.hidden{
+    display:none;
+}
+.review-button {
+    /* Inherit base styles */
+    
+    
+    background: linear-gradient(45deg, #17a2b8, #20c997); /* Engaging gradient from teal to green */
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4); /* Pronounced shadow for emphasis */
+}
+
+.review-button:hover {
+    transform: scale(1.03); /* Slightly larger scale for engagement */
+    box-shadow: 0 8px 20px rgba(23, 162, 184, 0.6);
+}
+.quiz-button {
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Slightly rounded corners for a modern look */
+    padding: 12px 24px; /* Generous padding for easy clicking */
+    font-size: 16px; /* Readable font size */
+    font-weight: 600; /* Semi-bold text */
+    cursor: pointer; /* Indicate interactivity */
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; /* Smooth transitions */
+    text-transform: uppercase; /* Professional look */
+    letter-spacing: 0.5px;
+}
+
+.quiz-button:hover {
+    transform: translateY(-2px); /* Subtle lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow on hover */
+}
+
+.quiz-button:active {
+    transform: translateY(0); /* Press down effect on click */
+    box-shadow: none;
+}
+#retry {
+    /* Inherit base styles */
+    
+    background-color: #007bff; /* Bright, professional blue */
+    color: #ffffff; /* White text for contrast */
+}
+
+#retry:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+.overflow-set{
+    height: 500px;
+    overflow: scroll;
+}
+.overflow-set-modal{
+    height: 300px;
+    overflow: scroll;
+}
+/*
+ * ---------------------------------------
+ * CIRCULAR TIMER STYLES
+ * ---------------------------------------
+ */
+
+ .timer-circle {
+    /* --- 1. Custom Properties (Variables) --- */
+    /* Define the main properties for easy modification and JS access */
+    --timer-size: 80px;       /* Width and height of the circle */
+    --timer-color: #3498db;    /* Color of the remaining time (e.g., blue) */
+    --track-color: #ecf0f1;    /* Color of the elapsed time / background (light gray) */
+    
+    /* THIS IS THE KEY: Your JavaScript will update this variable.
+       '1' means 100% full (start). '0' means 0% full (end). 
+       Example: 0.5 would be 50% full.
+    */
+    --progress: 1;             
+  
+    /* --- 2. Shape and Positioning --- */
+    width: var(--timer-size);
+    height: var(--timer-size);
+    border-radius: 50%;
+    
+    /* Use Flexbox to center the number in the middle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Position relative is good practice if you want to add effects later */
+    position: relative;
+    
+    /* Add a subtle shadow to give it depth, which can be interpreted as the "moves down" effect */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    
+    /* --- 3. Circular Progress Effect (Conic Gradient) --- */
+    /* This creates a pie-chart effect. The value of --progress controls the fill. */
+    background: conic-gradient(
+      /* The main timer color fills up to the progress point */
+      var(--timer-color) calc(var(--progress) * 360deg), 
+      /* The track color fills the rest of the circle */
+      var(--track-color) 0deg
+    );
+    
+    /* Smoothly transition the background when the progress variable changes */
+    transition: background 0.3s linear;
+  }
+  
+  /* ---------------------------------------
+   * STYLES FOR THE NUMBER IN THE MIDDLE
+   * --------------------------------------- */
+  
+  .timer-number {
+    /* To make the number legible on the background */
+    background-color: white; 
+    /* Make the background slightly smaller than the container to create the ring effect */
+    width: calc(var(--timer-size) - 20px); 
+    height: calc(var(--timer-size) - 20px);
+    border-radius: 50%;
+    
+    /* Re-center the text within its new, smaller white circle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Text styling */
+    font-family: 'Inter', sans-serif; /* Use your preferred font */
+    font-size: calc(var(--timer-size) / 3); /* Sizing the font relative to the circle */
+    font-weight: 700;
+    color: #2c3e50; /* Darker text color */
+  }
+  
+  /* Optional: Subtle animation for the number itself as time runs out */
+  .timer-number.warning {
+    color: #e74c3c; /* Change color when time is low */
+    animation: pulse 1s infinite alternate;
+  }
+  
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+  
+  #f-btn {
+    background-color: #6c63ff; /* Purple background */
+    color: #ffffff; /* White text */
+    padding: 12px 24px; /* Add sufficient padding */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 16px; /* Increase font size for better readability */
+    font-weight: bold; /* Make the text bold */
+    text-align: center; /* Center the text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+
+  #f-txt{
+   
+    color:white;
+  }
+  #more-words{
+    border-radius: 8px;
+    border-color: purple;
+    background-color: white;
+  }
+  /* Style for the "More Words" button */
+#more-words {
+    border-radius: 8px;
+    border: 2px solid #6c63ff; /* Purple border */
+    background-color: #ffffff; /* White background */
+    color: #6c63ff; /* Purple text */
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#more-words:hover {
+    background-color: #6c63ff; /* Purple background on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+/* Style for the "Correct" button */
+#correctbtn {
+    background-color: #28a745; /* Green background */
+    color: #ffffff; /* White text */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    display: none;
+    cursor: default;
+}
+
+/* Style for the "Incorrect" button */
+#incorrectbtn {
+    background-color: #dc3545; /* Red background */
+    color: #ffffff; /* White text */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    display: none;
+    cursor: default;
+}
+
+/* Style for the "Retry" button */
+#retry {
+    background-color: #007bff; /* Bright blue background */
+    color: #ffffff; /* White text */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#retry:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style for the "Finish" button */
+#f-btn {
+    background-color: #6c63ff; /* Purple background */
+    color: #ffffff; /* White text */
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#f-btn:hover {
+    background-color: #4b47cc; /* Darker purple on hover */
+}
+
+/* Style for the review questions section */
+#review {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 16px; /* Space between items */
+    padding: 16px;
+    background-color: #f8f9fa; /* Light gray background */
+    border-radius: 8px;
+    border: 1px solid #ddd; /* Subtle border */
+    max-height: 300px; /* Limit height */
+    overflow-y: auto; /* Scroll if content overflows */
+}
+
+#review > p {
+    background-color: #ffffff; /* White background for each item */
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-size: 14px;
+    color: #333; /* Dark text */
+}
+#new-quiz{
+
+    margin: 20%;
+    height:45px;
+    width: 100%;
+    text-wrap:auto;
+}
+.extra-margin{
+    margin: 10px;
+} 
+.textarea-shadow {
+    overflow-y: auto;
+    position: absolute; /* Match the textarea's position */
+    top: 0; /* Align with the textarea */
+    left: 0; /* Align with the textarea */
+    width: 90%; /* Match the textarea's width */
+    height: 120px; /* Match the textarea's height */
+    padding: 15px; /* Match the textarea's padding */
+    margin-bottom: 25px; /* Match the textarea's margin */
+    border-radius: 12px; /* Match the textarea's border radius */
+    border: 1px solid transparent; /* Make the border invisible */
+    resize: none; /* Prevent resizing */
+    font-family: 'Inter', sans-serif; /* Match the textarea's font */
+    font-size: 16px; /* Match the textarea's font size */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Match the textarea's shadow */
+    color: black;
+    background-color: white; 
+    z-index: -1; /* Place it behind the textarea */
+    white-space: pre-wrap; /* Preserve whitespace and line breaks */
+    word-wrap: break-word; /* Ensure long words break properly */
+}
+
+textarea {
+    position: relative; /* Ensure proper stacking with the shadow */
+    width: 90%;
+    height: 120px;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: transparent; /* Make the background transparent */
+    color: #333; /* Set the text color */
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(52, 152, 219, 0.2);
+}
+.invisible-text {
+    color: transparent; /* Makes the text color transparent */
+    
+}
+.textarea-shadow:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(52, 152, 219, 0.2);
+}
+
+.highlighted{
+    background-color: yellow;
+}
+.statement{
+    font-size: 18px;
+    margin-bottom: 15px;
+    line-height: 1.6;
+    text-transform: uppercase;
+}
+.filter-panel {
+    padding: 20px; /* Add internal spacing */
+    background: #ffffff; /* Set white background */
+    border-radius: 12px; /* Round the corners */
+    max-width: 600px; /* Limit the width */
+    margin: 0 auto; /* Center the panel */
+}
+
+/* Header for the filter panel */
+.filter-title {
+    color: #2c3e50; /* Set dark blue color */
+    font-size: 24px; /* Set font size */
+    margin-bottom: 20px; /* Space below title */
+    border-bottom: 2px solid #3498db; /* Blue accent line */
+    padding-bottom: 10px; /* Space above line */
+}
+
+/* Individual sections for categories (Months, Books, etc.) */
+.filter-section {
+    margin-bottom: 25px; /* Space between sections */
+}
+
+/* Subtitles for filter categories */
+.section-subtitle {
+    font-size: 16px; /* Set font size */
+    color: #7f8c8d; /* Set muted gray color */
+    text-transform: uppercase; /* Use all caps */
+    letter-spacing: 1px; /* Add character spacing */
+    margin-bottom: 12px; /* Space below subtitle */
+}
+
+/* Grid layout for checkbox/radio items */
+.filter-grid {
+    display: grid; /* Use CSS grid */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive columns */
+    gap: 10px; /* Space between items */
+}
+
+/* Individual filter item (label + input) */
+.filter-item {
+    display: flex; /* Align elements horizontally */
+    align-items: center; /* Center vertically */
+    padding: 8px 12px; /* Add internal padding */
+    background: #f8f9fa; /* Light gray background */
+    border-radius: 6px; /* Round corners */
+    cursor: pointer; /* Change cursor on hover */
+    transition: background 0.2s ease; /* Smooth hover transition */
+}
+
+/* Hover effect for filter items */
+.filter-item:hover {
+    background: #e9ecef; /* Darken background on hover */
+}
+
+/* Space between input and label text */
+.filter-label-text {
+    margin-left: 10px; /* Push text away from input */
+    font-size: 14px; /* Set font size */
+    color: #34495e; /* Set text color */
+}
+
+/* Action button area */
+.filter-actions {
+    margin-top: 30px; /* Space above actions */
+    display: flex; /* Use flexbox */
+    justify-content: flex-end; /* Align to the right */
+}
+
+/* Specific styling for the apply button */
+.apply-btn {
+    background-color: #2ecc71; /* Use green for action */
+}
+
+.apply-btn:hover {
+    background-color: #27ae60; /* Darken green on hover */
+}
+/*
+|--------------------------------------------------------------------------
+| MONTHLY UNDERLINE CLASSES
+|--------------------------------------------------------------------------
+| Classes for text-decoration-color, text-decoration-line, and thickness.
+*/
+
+/* --- MOST DISTINCTIVE MONTHS (Oct - Mar) - Vibrant, 3px thick --- */
+/* Overlay to dim the background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(0.25rem); /* Modern frosted glass effect */
+}
+
+/* The Modal Box */
+.modal-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    /* Wide blue border for nice UI */
+    border: 0.5rem solid #2563eb; 
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%; /* Mobile width */
+    max-width: 35rem; /* Max width for computers */
+    min-width: 280px; /* Using px for min-width constraint */
+    box-shadow: 0 1.25rem 1.5rem -0.25rem rgba(0, 0, 0, 0.2);
+}
+
+/* Positioning the X in the top right */
+.modal-close-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    color: #ef4444; /* Red on hover for clarity */
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+    color: #1e293b;
+    font-weight: 700;
+    text-align: center;
+}
+
+.modal-body {
+    flex-grow: 1; /* Fills available space */
+    width: 100%;
+    overflow-y: auto;
+    overflow-x:auto; /* Scrollable if content is long */
+    max-height: 70vh; /* Prevents modal from being taller than screen */
+}
+
+/* Scannable Flex adjustment for children content */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
