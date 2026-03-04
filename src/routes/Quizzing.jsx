@@ -222,7 +222,7 @@ export default function Quizzing() {
           <div>
             <QuizListView mode={selectedMode} onBack={() => setSelectedMode(null)} />
           </div>
-        )}
+        )};
       </div>
     </div>
   );
