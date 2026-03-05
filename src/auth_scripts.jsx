@@ -1,4 +1,5 @@
 
+import { EyeClosed, LucideEye } from 'lucide-react';
 import React, {useState, useEffect} from 'react'
 import { useParams, useLocation , useNavigate} from 'react-router-dom';
 // Base URL for the create account endpoint
@@ -161,9 +162,10 @@ const ShowIcon = () => (
 
 
 // --- NEW COMPONENT: LogIn ---
-const LogIn = ({ formData, handleInputChange, handleSubmit, error, loading }) => (
+const LogIn = ({ formData, handleInputChange, handleSubmit,setPasswordHidden, error, loading,passwordHidden }) => (
     <div className="auth-form">
         <h2>Log In</h2>
+        <form>
         <input 
             type="email" 
             name="email" 
@@ -173,17 +175,23 @@ const LogIn = ({ formData, handleInputChange, handleSubmit, error, loading }) =>
         />
         
         <input 
-            type="password" 
+                type={passwordHidden ? "password" : "text"}  
             name="password" 
             placeholder="Password" 
             value={formData.password} 
             onChange={handleInputChange} 
-        />
-        
+            />
+            <button
+                onClick={() => setPasswordHidden(p => !p)} // Toggles the boolean state of passwordHidden
+                style={buttonStyle} // Applies flexible, rem-based styling
+                aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility for screen readers
+            >
+                {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} {/* Renders icon based on state using rem for sizing */}
+            </button> </form>
         {error && <p className="error-text">{error.foot}</p>}
         <button 
             className="auth-submit-btn" 
-            onClick={() => handleSubmit('logIn')}
+            onClick={(e)=>{e.preventDefault();  handleSubmit('logIn')}}
             disabled={loading}
         >
             {loading ? 'Logging in...' : 'Log In'}
@@ -192,9 +200,9 @@ const LogIn = ({ formData, handleInputChange, handleSubmit, error, loading }) =>
 );
 
 // --- NEW COMPONENT: CreateAccount ---
-const CreateAccount = ({ formData, handleInputChange, handleSubmit, error, loading , onFocusChange}) => (
+const CreateAccount = ({ formData, handleInputChange, handleSubmit,passwordHidden,setPasswordHidden, error, loading , onFocusChange}) => (
     <div className="auth-form">
-        
+        <form>
         <h2>Create Account</h2>
          {error && <p className="error-text">{error.username}</p>}
         <input 
@@ -216,27 +224,41 @@ const CreateAccount = ({ formData, handleInputChange, handleSubmit, error, loadi
         />
        {error && <p className="error-text">{error.password}</p>}
         <input 
-            type="password" 
+                type={passwordHidden ? "password" : "text"} 
             name="password" 
             placeholder="Password" 
             value={formData.password} 
             onChange={handleInputChange} 
              onBlur={onFocusChange}
-        />
+            />
+            <button
+                onClick={() => setPasswordHidden(p => !p)} // Toggles the boolean state of passwordHidden
+                style={buttonStyle} // Applies flexible, rem-based styling
+                aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility for screen readers
+            >
+                {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} {/* Renders icon based on state using rem for sizing */}
+            </button>
          {error && <p className="error-text">{error.cpassword}</p>}
           <input 
-            type="password" 
+            type={passwordHidden ? "password":"text"} 
             name="cpassword" 
             placeholder="Confrim Password" 
             value={formData.cpassword} 
             onChange={handleInputChange} 
              onBlur={onFocusChange}
-        />
-       
+            /><button onClick={() => setPasswordHidden(p => !p)} >{passwordHidden ? <LucideEye /> :<EyeClosed/>}</button>
+        </form>
         {error && <p className="error-text">{error.foot}</p>}
-        <button 
+        
+        <button
+            onClick={() => setPasswordHidden(p => !p)} // Toggles the boolean state of passwordHidden
+            style={buttonStyle} // Applies flexible, rem-based styling
+            aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility for screen readers
+        >
+            {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} {/* Renders icon based on state using rem for sizing */}
+        </button><button 
             className="auth-submit-btn" 
-            onClick={() => handleSubmit('create')}
+            onClick={(e) =>{e.preventDefault(); handleSubmit('create')}}
             disabled={loading}
         >
             {loading ? 'Creating...' : 'Create Account'}
@@ -246,6 +268,7 @@ const CreateAccount = ({ formData, handleInputChange, handleSubmit, error, loadi
 
 // --- MAIN PARENT COMPONENT ---
 export default function AuthPage() {
+    const [passwordHidden, setPasswordHidden] = useState(true); // State to toggle password visibility
     const navagate = useNavigate();
     let  { inittype } = useParams();
     const [type, setType] = useState(inittype)// 'logIn' or 'create'
@@ -299,7 +322,7 @@ export default function AuthPage() {
       ...prev,
       foot:''
     }))
-    if(Object.values(error).some(e=>e !==  '')){return}
+   // if(Object.values(error).some(e=>e !==  '')){return}
         setLoading(true);
         
         const url = actionType === 'create' ? createUrl : loginUrl;
@@ -342,6 +365,8 @@ export default function AuthPage() {
                     formData={formData} 
                     handleInputChange={handleInputChange} 
                     handleSubmit={handleSubmit}
+                    passwordHidden={passwordHidden}
+                    setPasswordHidden={setPasswordHidden}
                     error={error}
                     loading={loading}
                 />
@@ -350,7 +375,9 @@ export default function AuthPage() {
                     formData={formData} 
                     handleInputChange={handleInputChange} 
                     handleSubmit={handleSubmit}
+                    passwordHidden={passwordHidden}
                     error={error}
+                    setPasswordHidden={setPasswordHidden}
                     loading={loading}
                     onFocusChange={onFocusChange}
                 />

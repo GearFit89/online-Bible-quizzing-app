@@ -57,93 +57,47 @@ function ServerStatusBadge() {
 }
 
 // Fullscreen Menu Overlay
-function FullMenu({ links, onClose }) { // Define the FullMenu component with props
-  const [isClosed, setIsClosed] = useState(false); // State to track if the menu is closing
+import './menu.css'; // Import the external stylesheet containing the layout rules
 
-  const overlayStyle = { // Style object for the main full-screen container
-    position: 'fixed', // Fixes the menu to the viewport
-    top: 0, // Aligns to the top edge
-    left: 0, // Aligns to the left edge
-    width: '100%', // Takes the full width of the screen
-    height: '100%', // Takes the full height of the screen
-    backgroundColor: 'rgba(15, 23, 42, 0.95)', // Deep slate with high opacity
-    backdropFilter: 'blur(0.5rem)', // Adds a modern frosted glass effect
-    zIndex: 2000, // Ensures it sits above all other elements
-    display: 'flex', // Enables flexbox layout
-    flexDirection: 'column', // Stacks children vertically
-    padding: '2rem', // Responsive internal spacing
-    boxSizing: 'border-box', // Includes padding in width/height calculations
-    transition: 'opacity 0.3s ease' // Smooth transition for entry/exit
-  }; // End of overlayStyle
+function FullMenu({ links, onClose }) { // Define the functional component with props
+  const [isClosed, setIsClosed] = useState(false); // Initialize state to manage the closing sequence
 
-  const headerStyle = { // Style object for the top section
-    display: 'flex', // Uses flex for alignment
-    justifyContent: 'flex-end', // Pushes the close button to the right
-    width: '100%' // Ensures the header spans the full width
-  }; // End of headerStyle
+  if (isClosed) return null; // Prevent rendering if the menu is flagged as closed
 
-  const closeBtnStyle = { // Style object for the close button
-    background: 'none', // Removes default button background
-    border: 'none', // Removes default button border
-    color: 'white', // Sets icon color to white
-    cursor: 'pointer', // Changes cursor to pointer on hover
-    padding: '0.5rem', // Increases hit area for better mobile UX
-    transition: 'transform 0.2s ease' // Subtle scaling animation on interaction
-  }; // End of closeBtnStyle
+  return ( // Begin component render tree
+    <div className="menu-overlay"> {/* Wrap the entire menu in the gradient background container */}
+      <div className="menu-header"> {/* Top section to hold the close action */}
+        <button // Interactive close button element
+          className="close-btn" // Apply the circular app-button styling
+          onClick={() => { // Define the click event handler
+            setIsClosed(true); // Update internal state to hide the UI immediately
+            onClose(); // Trigger the parent component's close logic
+          }} // End of click handler
+          aria-label="Close application menu" // Provide context for screen readers
+        > {/* Begin button children */}
+          <X size="2rem" strokeWidth={2.5} /> {/* Render the Lucide icon with a thicker, modern stroke */}
+        </button> {/* End of button element */}
+      </div> {/* End of header section */}
 
-  const linkContainerStyle = { // Style object for the navigation links
-    display: 'flex', // Uses flexbox for centering
-    flexDirection: 'column', // Stacks links vertically
-    gap: '2.5rem', // Vertical spacing between menu items
-    justifyContent: 'center', // Centers links vertically
-    alignItems: 'center', // Centers links horizontally
-    flexGrow: 1, // Forces the container to fill all available screen space
-    width: '100%' // Ensures it spans the horizontal center
-  }; // End of linkContainerStyle
-
-  const linkStyle = { // Style object for individual navigation links
-    color: 'white', // Sets text color to white
-    fontSize: '2rem', // Large, readable font size for all screens
-    textDecoration: 'none', // Removes standard link underlines
-    fontWeight: '600', // Semibold weight for professional look
-    display: 'flex', // Flex layout for icon and label alignment
-    alignItems: 'center', // Vertically centers icon with text
-    gap: '1rem', // Space between the icon and the link text
-    transition: 'color 0.2s ease' // Smooth color change for hover states
-  }; // End of linkStyle
-
-  return ( // Component render block
-    <div style={overlayStyle}> {/* Main menu wrapper */}
-      <div style={headerStyle}> {/* Top navigation area */}
-        <button  // Close action button
-          onClick={() => { // Click event handler
-            onClose(); // Triggers the parent close function
-            setIsClosed(true); // Updates local closing state
-          }} // End of onClick
-          style={closeBtnStyle} // Applies button styles
-          aria-label="Close menu" // Improves accessibility for screen readers
-        > {/* Button content start */}
-          {!isClosed && <X size="3rem" />} {/* Renders X icon if not closed */}
-        </button> {/* End of button */}
-      </div> {/* End of header */}
-      <nav style={linkContainerStyle}> {/* Navigation container using flex-grow */}
-        {links.map((link, i) => ( // Maps through the links array
-          link.tab && ( // Conditional check to only show links marked as tabs
-            <Link // Navigation link component
-              key={i} // Unique key for React list rendering
-              to={link.path} // Destination URL path
-              onClick={onClose} // Closes menu when a link is clicked
-              style={linkStyle} // Applies individual link styles
-            > {/* Link content start */}
-              {link.icon} {/* Renders the associated Lucide icon */}
-              <span>{link.label}</span> {/* Renders the text label */}
-            </Link> // End of Link
-          ) // End of conditional
-        ))} {/* End of map */}
-      </nav> {/* End of nav */}
-    </div> // End of main div
-  ); // End of return
-} // End of FullMenu component
+      <nav className="menu-link-container"> {/* Main navigation area using flex-grow */}
+        {links.map((link, i) => ( // Iterate through the provided array of link objects
+          link.tab && ( // Conditionally render only if the item is marked as a tab
+            <Link // Utilize React Router's Link for seamless client-side navigation
+              key={i} // Assign a unique key for React's reconciliation process
+              to={link.path} // Set the destination URL path
+              onClick={onClose} // Ensure the menu closes automatically upon navigation
+              className="menu-tab" // Apply the elevated card styling
+            > {/* Begin link children */}
+              {/* Ensure icons passed in props are sized appropriately (e.g., 2.5rem) */}
+              {link.icon} {/* Render the visual icon provided in the data array */}
+              <span>{link.label}</span> {/* Render the text label for the route */}
+            </Link> // End of Link component
+          ) // End of conditional render block
+        ))} {/* End of array mapping */}
+      </nav> {/* End of navigation section */}
+    </div> // End of main overlay container
+  ); // End of component return
+} // End of component definition// End of FullMenu component
 
 export function Tab({ links = [] }) {
   const { headerSet, setHeaderSet } = useHeader();

@@ -1,0 +1,106 @@
+/* Main overlay container with a bright, professional gradient */
+.menu-overlay {
+  position: fixed; /* Fix to the viewport */
+  top: 0; /* Align to the top edge */
+  left: 0; /* Align to the left edge */
+  width: 100%; /* Take up the full screen width */
+  height: 100%; /* Take up the full screen height */
+  background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%); /* Soft, life-giving sky blue gradient */
+  z-index: 2000; /* Ensure it floats above the rest of the app */
+  display: flex; /* Enable flexbox layout */
+  flex-direction: column; /* Mobile-first: stack items vertically */
+  padding: 5%; /* Use percentage for scalable padding */
+  box-sizing: border-box; /* Include padding in total dimensions */
+  animation: fadeIn 0.3s ease-out; /* Smooth fade-in animation */
+}
+
+/* Header layout for the close button */
+.menu-header {
+  display: flex; /* Enable flexbox for alignment */
+  justify-content: flex-end; /* Push the close button to the far right */
+  width: 100%; /* Span the full container width */
+}
+
+/* App-styled circular close button */
+.close-btn {
+  background: #ffffff; /* Crisp white background */
+  border: none; /* Remove default borders */
+  border-radius: 50%; /* Create a perfect circle shape */
+  color: #0f172a; /* Dark slate icon color for contrast */
+  cursor: pointer; /* Indicate interactivity */
+  padding: 1rem; /* Large, touch-friendly hit area */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); /* Soft drop shadow for depth */
+  display: flex; /* Flexbox to center the icon */
+  align-items: center; /* Center the icon vertically */
+  justify-content: center; /* Center the icon horizontally */
+  transition: transform 0.2s ease, background 0.2s ease; /* Smooth hover effects */
+}
+
+/* Close button hover interaction */
+.close-btn:hover {
+  transform: scale(1.1); /* Grow slightly when hovered or tapped */
+  background: #f1f5f9; /* Shift to a light gray on hover */
+}
+
+/* Container holding the navigation tabs */
+.menu-link-container {
+  display: flex; /* Enable flex layout */
+  flex-direction: column; /* Stack tabs vertically on mobile */
+  flex-grow: 1; /* Expand to fill all available vertical space */
+  gap: 1.5rem; /* Consistent spacing between tabs */
+  justify-content: center; /* Center the group of tabs vertically */
+  align-items: center; /* Center the tabs horizontally */
+  width: 100%; /* Span the full width */
+  padding: 2rem 0; /* Add vertical breathing room */
+}
+
+/* App-like interactive tabs/cards */
+.menu-tab {
+  display: flex; /* Flex layout to align icon and text */
+  align-items: center; /* Center items vertically */
+  justify-content: flex-start; /* Align contents to the left on mobile */
+  gap: 1.5rem; /* Space between the icon and label */
+  background: #ffffff; /* Solid white card background */
+  color: #0284c7; /* Vibrant, professional primary blue text */
+  text-decoration: none; /* Remove default link underlines */
+  font-size: 1.5rem; /* Scalable, highly readable font size */
+  font-weight: 600; /* Semi-bold for a modern UI feel */
+  padding: 1.5rem 2rem; /* Generous internal spacing */
+  width: 90%; /* Take up most of the mobile screen width */
+  border-radius: 1.5rem; /* Smooth, rounded app-style corners */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); /* Base elevation shadow */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Fluid, bouncy transition */
+  min-height: 80px; /* Use px strictly for the minimum touch target height constraint */
+}
+
+/* Tab hover and focus states for smoother UX */
+.menu-tab:hover {
+  transform: translateY(-0.25rem) scale(1.02); /* Lift and grow slightly */
+  box-shadow: 0 1rem 2rem rgba(2, 132, 199, 0.15); /* Expand shadow with a blue tint */
+  color: #0369a1; /* Darken the text color slightly */
+}
+
+/* Computer and large tablet responsive layout */
+@media (min-width: 64rem) {
+  .menu-link-container {
+    flex-direction: row; /* Switch to horizontal layout for large screens */
+    flex-wrap: wrap; /* Allow tabs to wrap to a new line if there are many */
+    align-content: center; /* Center the wrapped lines vertically */
+  }
+
+  .menu-tab {
+    width: 25%; /* Limit tab width so multiple fit side-by-side */
+    flex-grow: 1; /* Allow tabs to stretch to fill uneven rows safely */
+    flex-direction: column; /* Stack the icon above the text on desktop */
+    justify-content: center; /* Center all internal content */
+    text-align: center; /* Center the text label */
+    font-size: 1.75rem; /* Scale up the text for larger monitors */
+    min-height: 200px; /* Use px strictly for the minimum desktop card height */
+  }
+}
+
+/* Simple fade animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; } /* Start fully transparent */
+  to { opacity: 1; } /* End fully opaque */
+}

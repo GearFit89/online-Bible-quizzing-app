@@ -179,8 +179,8 @@ export const AdvancedSettings = () => {
                         <label key={type.id} className="toggle-label" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                             <input
                                 type="checkbox"
-                                checked={settings.allowedQuestionTypes.includes(type.id)}
-                                onChange={() => toggleArrayItem('allowedQuestionTypes', type.id)}
+                                checked={settings.types.includes(type.id)}
+                                onChange={() => toggleArrayItem('types', type.id)}
                             />
                             {type.label}
                         </label>

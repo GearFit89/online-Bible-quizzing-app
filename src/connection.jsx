@@ -288,10 +288,11 @@ const UPDATE_TYPES = useMemo(()=>({
             
         }
         if (Array.isArray(res)) {
-            window.dispatchEvent(new CustomEvent('fast-char-update', {
-                detail: res
-            }));
-            //setChars(data);
+        
+            // window.dispatchEvent(new CustomEvent('fast-char-update', {
+            //     detail: res
+            // }));
+            setChars(res);
             return;
         };
         const updateType = res.payload?.update;

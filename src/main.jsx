@@ -46,7 +46,7 @@ export const routes = [
   {
     tab: true,
     path: 'dashboard/leaderboard', // URL path
-    label: 'Quiz', // Text for nav bar
+    label: 'Leaderboard', // Text for nav bar
     icon: <TrophyIcon size={18} />, // Icon element
     component: Leaderboard // The React component to render
   },
@@ -79,9 +79,9 @@ export const routes = [
     component: AuthPage // The React component to render
   },
   {
-    tab: false,
+    tab: true,
     path: 'settings', // URL path
-    label: '', // Text for nav bar
+    label: 'Quiz Settings', // Text for nav bar
     icon: '', // Icon element
     component: AdvancedSettings // The React component to render
   },

@@ -107,7 +107,7 @@ export const QuizProvider = ({ children }) => {
         usersScore: {},
         usersMetatData: {},
         isTimerRuning: false,
-        timeLen:5,
+        timeLen:30,
         // Boolean to track if the game is temporarily paused
         isPaused: false,
         currentQuestState:'',
@@ -835,15 +835,14 @@ const {setStream, isInput, setIsInput} = useStream()
                 questIdRef.current = questionId;
                 setStream([]);
                 setIsInput(false);
+                alert('new question incoming', questionId);
                 setGameState(prev => ({ ...prev, isTimerRuning: false })); 
                 setChars('Question: ');
                 return;
             }
 
             // Handle end of question
-            if (char === '?' && !userJumped) {
-                setUserInput('');
-            }
+            
             if (questIdRef.current === questionId) {
             // Append the character instantly to the screen
             setChars((prev) => {
@@ -851,7 +850,10 @@ const {setStream, isInput, setIsInput} = useStream()
                 charArray[charIndex + 10] = char; // +10 offset for 'Question: ' length
                 return charArray.join('');
             });
-
+                if (char === '?' && !userJumped) {
+                    setUserInput('');
+                    return;
+                }
             // Update user input state
            
                 setUserInput((prev) => {
@@ -872,52 +874,50 @@ const {setStream, isInput, setIsInput} = useStream()
         // Cleanup listener on unmount
         return () => window.removeEventListener('fast-char-update', handleFastChar);
 
-    }, []); // Dependencies are stable
-    // const [questionId, char, charIndex] = streamChars || [];
-    // useEffect(() => {
+    }, [streamChars]); // Listen to character stream updates
+
+    const [questionId, char, charIndex] = streamChars || [];
+    useEffect(() => {
         
-           
 
-    //         // Handle start of question
-    //         if (char === 'Question: ') {
-    //             setCanJump(true);
-    //             questIdRef.current = questionId;
-    //             setStream([]);
-    //             setIsInput(false);
-    //             setGameState(prev => ({ ...prev, isTimerRuning: false }));
-    //             setChars('Question: ');
-    //             return;
-    //         }
+        // Handle start of question
+        if (char === 'Question: ') {
+            setCanJump(true);
+            questIdRef.current = questionId;
+            setStream([]);
+            setIsInput(false);
+            setGameState(prev => ({ ...prev, isTimerRuning: false }));
+            setChars('Question: ');
+            return;
+        }
 
-    //         // Handle end of question
-    //         if (char === '?' && !userJumped) {
-    //             setUserInput('');
-    //         }
-    //         if (questIdRef.current === questionId) {
-    //             // Append the character instantly to the screen
-    //             setChars((prev) => {
-    //                 const charArray = prev.split('');
-    //                 charArray[charIndex + 10] = char; // +10 offset for 'Question: ' length
-    //                 return charArray.join('');
-    //             });
+        // Handle end of question
+        
+        if (questIdRef.current === questionId) {
+            // Append the character instantly to the screen
+            setChars((prev) => {
+                const charArray = prev.split('');
+                charArray[charIndex + 10] = char; // +10 offset for 'Question: ' length
+                return charArray.join('');
+            });
 
-    //             // Update user input state
+            // Update user input state
+            if (char === '?' && !userJumped) {
+                setUserInput('');
+                return;
+            }
+            setUserInput((prev) => {
+                const charArray = prev.split('');
+                charArray[charIndex] = char;
+                return charArray.join('');
+            });
+        }
+        else {
+            console.error('incorrect id wuets', questIdRef.current, questionId)
+        };
 
-    //             setUserInput((prev) => {
-    //                 const charArray = prev.split('');
-    //                 charArray[charIndex] = char;
-    //                 return charArray.join('');
-    //             });
-    //         }
-    //         else {
-    //             console.error('incorrect id wuets', questIdRef.current, questionId)
-    //         };
-       
-
-    //     // Attach listener
-      
-
-    // }, [streamChars]); // Listen to character stream updates
+    }, [streamChars]); // Listen to character stream updates
+    
     return (
         <div className='question-chars'>{chars}</div>
     );
@@ -1116,11 +1116,11 @@ useEffect(()=>{setUserInput(prev=> prev + transcript)}, [transcript])
             if (serverStream.username === profileData.username ) {
                 setIsInput(true);
                 setCout(p => p+1);   
-                setGameState(prev => ({ ...prev, isTimerRuning: false, timeLen: 30 }));        
-                setGameState(prev => ({ ...prev, isTimerRuning: true, timeLen: 30 }));
+                setGameState(prev => ({ ...prev, isTimerRuning: false,  }));        
+                setGameState(prev => ({ ...prev, isTimerRuning: true, }));
             } else {
-                setGameState(prev => ({ ...prev, isTimerRuning: false, timeLen: 30 }));
-                setGameState(prev => ({ ...prev, isTimerRuning: true, timeLen: 30 }));
+                setGameState(prev => ({ ...prev, isTimerRuning: false,  }));
+                setGameState(prev => ({ ...prev, isTimerRuning: true,  }));
                 setCer(p => p+1);
                 newData = {
                     text: `${serverStream.username} is Answering`,
@@ -1670,14 +1670,17 @@ export default function QuizApp(){
         const rawConfig = params.get('config');
         const [initalScore, setinitScore] = useState({})
         const [isTeamMode, setIsTeamMode] = useState(false);
-        
+        const [timerSettings, setTimerSettings] = useState({  isTimerRuning: false });  
    const userConfig = quizData.userConfig || {};
    const start = quizData.start;
+   const settings = quizData.settings;
         // Check if the quiz has actually started
       
         useEffect(() => {
             if(start){
-                setSart(true)
+                setSart(true);
+                const { timerSettings } = settings;
+                setTimerSettings(ts => ({ ...ts, timeLen: timerSettings?.questionAnswer || ts.timeLen, isTimerRuning: timerSettings?.isTimerRuning || ts.isTimerRuning }) )
             }
         }, [start]) 
         
