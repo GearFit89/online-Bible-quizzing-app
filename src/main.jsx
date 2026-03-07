@@ -20,7 +20,8 @@ import { Profile } from './routes/Profile.jsx';
 import { useState, useEffect } from 'react';
 import { StatusOutputBox } from './status.jsx'
 import IndexPage from './routes/IndexPage.jsx'
-import { AdvancedSettings } from './settings.jsx'
+import { AdvancedSettings } from './settings.jsx';
+// Base URL for API endpoints
 const settings = ()=>{
   return (<div>
     <h1>Settings Page</h1>

@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useContext, createContext, useMemo, useCallback} from "react";
 import { handleServerFetch } from './auth_scripts.jsx'
 import { decode } from "@msgpack/msgpack";
+import { BASE_URL } from './config.js'
 
-
-const sesssionUrl = 'http://localhost:3000/session'
+const sesssionUrl = BASE_URL +'/session'
 const  AppContext = createContext()
 const HeaderContex = createContext();
 const wsserverUrl = 'localhost:3000';

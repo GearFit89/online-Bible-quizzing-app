@@ -70,7 +70,8 @@ export default function DebugConsole() {
     const [lastPing, setLastPing] = useState(null);
 
     // --- INPUT STATE ---
-    const [customFunc, setCustomFunc] = useState('createRoom');
+    const [ isDevMode, setIsDevMode] = useState(false);
+    const [customFunc, setCustomFunc] = useState('deldbConfigure Runtime Arguments');
     const [customPayload, setCustomPayload] = useState('{"type":"quiz", "requiredUsers":[]}');
     const [customArgs, setCustomArgs] = useState('[]');
     const [history, setHistory] = useState([]);
@@ -81,6 +82,20 @@ export default function DebugConsole() {
     useEffect(() => {
         const saved = localStorage.getItem('debugConsoleHistory');
         if (saved) setHistory(JSON.parse(saved));
+        const handleKeyDown = (e) => { // Event handler function
+            // Check if the Alt key is held AND the 'd' key is pressed
+            if (e.altKey && e.code === 'KeyD') {
+                e.preventDefault(); // Stop the browser from performing default Alt actions
+                setIsDevMode(dm => !dm); // Toggle state
+            }
+        }; // End of handler
+
+        window.addEventListener('keydown', handleKeyDown); // Add listener on mount
+
+        return () => { // Cleanup function
+            window.removeEventListener('keydown', handleKeyDown); // Remove listener on unmount
+        }; // End of cleanup
+        
     }, []);
 
     // --- EFFECT: Argument Auto-Fill Logic ---

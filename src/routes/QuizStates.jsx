@@ -3,7 +3,7 @@ import { DragDropArea } from './dragDrop.jsx';
 import '../style.css'
 import { X, Trophy, RotateCcw, XCircle } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
-import { useConnection, USER_STATES } from '../connection.jsx';
+import { useConnection, USER_STATES,   wsClient } from '../connection.jsx';
 import { StreamProvider, useStream } from '../hooks/Status.jsx';
 ///import { userInfo } from 'node:os';
 const USERNAME = localStorage.getItem('username') || 'Guest';
@@ -808,7 +808,7 @@ function QuestHead({ questionHook }) {
 function QuestFoot({ questionHook }) {
     const {chars:streamChars} = useConnection();
     const [chars, setChars] = useState('');
-    const questIdRef = useRef(''); // Use a ref to track ID without causing re-renders
+    // Use a ref to track ID without causing re-renders
 const {setStream, isInput, setIsInput} = useStream()
     const {
         isWaiting,
@@ -832,7 +832,7 @@ const {setStream, isInput, setIsInput} = useStream()
             // Handle start of question
             if (char === 'Question: ') {
                 setCanJump(true);
-                questIdRef.current = questionId;
+                //questIdRef.current = questionId;
                 setStream([]);
                 setIsInput(false);
                 alert('new question incoming', questionId);
@@ -843,7 +843,7 @@ const {setStream, isInput, setIsInput} = useStream()
 
             // Handle end of question
             
-            if (questIdRef.current === questionId) {
+            if (true/*questIdRef.current === questionId*/) {
             // Append the character instantly to the screen
             setChars((prev) => {
                 const charArray = prev.split('');
@@ -883,17 +883,17 @@ const {setStream, isInput, setIsInput} = useStream()
         // Handle start of question
         if (char === 'Question: ') {
             setCanJump(true);
-            questIdRef.current = questionId;
+            //questIdRef.current = questionId;
             setStream([]);
             setIsInput(false);
-            setGameState(prev => ({ ...prev, isTimerRuning: false }));
+            //setGameState(prev => ({ ...prev, isTimerRuning: false }));
             setChars('Question: ');
             return;
         }
 
         // Handle end of question
         
-        if (questIdRef.current === questionId) {
+        if (true ) {
             // Append the character instantly to the screen
             setChars((prev) => {
                 const charArray = prev.split('');
@@ -919,8 +919,18 @@ const {setStream, isInput, setIsInput} = useStream()
     }, [streamChars]); // Listen to character stream updates
     
     return (
-        <div className='question-chars'>{chars}</div>
-    );
+        <div className='question-chars'>
+            {/* Wrap the prefix in a styled span if the text starts with it */}
+            {chars.startsWith("Question: ") ? ( // Check if prefix exists
+                <>
+                    <span style={{ color: 'blue' }}>Question: </span>
+                    {chars.slice(10)} {/* Render the rest of the question text */}
+                </>
+            ) : (
+                chars // Fallback if the prefix hasn't arrived yet
+            )}
+        </div>
+    ); // End of component return
 }
 const questionStyles = `
   .question-container {
@@ -1430,11 +1440,11 @@ setGameState(prev=>({...prev, isPlaying: true, }) );
             <div className="quiz-card" id="card">
                 
                 {/* --- Header Area --- */}
-             <button onClick={() => setIsSettingsOpen(true)}>
+             {/* <button onClick={() => setIsSettingsOpen(true)}>
                 <div className="settings-icon-btn" style={{position: 'absolute', right: '10px', top: '10px'}}>
                   
                 </div>
-               </button> 
+               </button>  */}
                 
 
             {/* --- Modals --- */}
@@ -1501,7 +1511,7 @@ setGameState(prev=>({...prev, isPlaying: true, }) );
                 
                 </QuizBody>
                 </StreamProvider>
-                <QuizFootBtns />
+                {/* <QuizFootBtns /> */}
             </div>
         </main>
        
@@ -1513,7 +1523,7 @@ function QuizLogs(){
     useEffect(()=>{
     SetLogs(prev=>[...prev, quizData])
     }, [quizData]);
-    return (<DebugLogger logs={logs} />)
+    return null;
 }
 const lobbyStyles = `
   .lobby-container {
@@ -1728,14 +1738,15 @@ wait();
                         ))}
 
                         {/* Fallback if you are the only one there and usersData hasn't populated */}
-                        {Object.keys(usersData || {}).length === 0 && (
+                      (
                             <PlayerCard
                                 username={profileData?.username || "Guest"}
                                 status="connected"
                                 isMe={true}
                             />
-                        )}
+                        )
                     </div>
+                    <button onClick={()=>wsClient.emit('start')} style={{backgroundColor:'blue', color:'white'}}>Start Now</button>
                 </div>
                 </QuizProvider>
             );

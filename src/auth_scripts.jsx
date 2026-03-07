@@ -3,9 +3,10 @@ import { EyeClosed, LucideEye } from 'lucide-react';
 import React, {useState, useEffect} from 'react'
 import { useParams, useLocation , useNavigate} from 'react-router-dom';
 // Base URL for the create account endpoint
-const createUrl = 'http://localhost:3000/createAccount'; ////  Defines the API endpoint for account creation
+import { BASE_URL } from './config.js'
+const createUrl = BASE_URL +'/createAccount'; ////  Defines the API endpoint for account creation
 // Base URL for the login endpoint (if implemented)
-const loginUrl = 'http://localhost:3000/login'; // Defines the API endpoint for user login
+const loginUrl = BASE_URL +'/login'; // Defines the API endpoint for user login
 
 
 /// for dealing page reloads aby sending rediect from 

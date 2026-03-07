@@ -14,7 +14,8 @@ import {
 export default function IndexPage() {
     // Logic to handle hover effects for inline styles
     const [hoveredItem, setHoveredItem] = useState(null);
-    const [signIn] = useState(false)
+    const conn = useConnection();
+    const signIn = conn.signIn || false;
 
     const styles = {
         page: {
