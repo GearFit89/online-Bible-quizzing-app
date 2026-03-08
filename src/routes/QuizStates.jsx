@@ -1173,10 +1173,10 @@ useEffect(()=>{setUserInput(prev=> prev + transcript)}, [transcript])
                             key={`${i}-${block.username}`}
                             style={{ '--user-color': stringToColor(block.username) }}
                         >
-                            <span>{block.text}{cer}</span>
+                            <span>{block.text}</span>
                         </div>
                     ))}
-                                <button onClick={()=>{setIsInput(true)}}>Redefine truth</button>
+                                {/* <button onClick={()=>{setIsInput(true)}}>Redefine truth</button> */}
                     {/* Live Character Stream with Close Button */}
                     {charStream.active && (
                         <div style={{ position: 'relative' }}>
