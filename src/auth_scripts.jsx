@@ -1,7 +1,7 @@
 
 import { EyeClosed, LucideEye } from 'lucide-react'; // Import icons for password visibility
 import React, {useState, useEffect} from 'react' // Import standard React hooks
-import { useParams, useLocation , useNavigate} from 'react-router-dom'; // Import router hooks for navigation
+import { useParams, useLocation , useNavigate, Link} from 'react-router-dom'; // Import router hooks for navigation
 import { BASE_URL } from './config.js' // Import the base API configuration
 
 const createUrl = BASE_URL +'/createAccount'; // Define the account creation endpoint
@@ -69,52 +69,54 @@ function validateAccountInfoFrontEnd(accountData) { // Function to validate inpu
 } // End function
 
 const LogIn = ({ formData, handleInputChange, handleSubmit, setPasswordHidden, error, loading, passwordHidden }) => ( // Sub-component for login view
-    <div className="auth-form"> // Form wrapper div
-        <h2>Log In</h2> // Component header
-        <form onSubmit={(e) => { e.preventDefault(); handleSubmit('login'); }}> // FIXED: Wrapped inputs in form and added submit handler
+    <div className="auth-form">
+        <h2>Log In</h2>
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit('login'); }}>
             <input // Email input field
                 type="email" // HTML type email
                 name="email" // Key name for state
                 placeholder="Email" // Placeholder text
                 value={formData.email} // Controlled value
                 onChange={handleInputChange} // Change listener
-            /> // End input
+            />
             
-            <div className="password-wrapper"> // Wrapper for toggle alignment
+            <div className="password-wrapper">
                 <input // Password input field
                     type={passwordHidden ? "password" : "text"} // Conditional type toggle
                     name="password" // Key name
                     placeholder="Password" // Placeholder
                     value={formData.password} // Controlled value
                     onChange={handleInputChange} // Change listener
-                /> // End input
+                />
                 <button // Visibility toggle button
                     type="button" // Prevent form submission
                     onClick={() => setPasswordHidden(p => !p)} // Toggle boolean state
                     className="toggle-btn" // CSS class
                     aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility
-                > // End button start
-                    {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} // Render toggle icon
-                </button> // End toggle button
-            </div> // End wrapper
+                >
+                    {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} 
+                </button>
+            </div>
             
-            {error && error.foot && <p className="error-text">{error.foot}</p>} // Show generic error message
+            {error && error.foot && <p className="error-text">{error.foot}</p>} 
             <button // Login submit button
                 className="auth-submit-btn" // CSS class
                 type="submit" // Trigger form onSubmit
                 disabled={loading} // Prevent double clicks
-            > // End button start
-                {loading ? 'Logging in...' : 'Log In'} // Loading state text
-            </button> // End submit button
-        </form> // End form
-    </div> // End component
+            >
+                {loading ? 'Logging in...' : 'Log In'} 
+            </button>
+        
+        </form>
+        <Link to='auth/sigin'>Don't have an account</Link>
+    </div>
 ); // End LogIn
 
 const CreateAccount = ({ formData, handleInputChange, handleSubmit, passwordHidden, setPasswordHidden, error, loading, onFocusChange }) => ( // Sub-component for account creation
-    <div className="auth-form"> // Form wrapper div
-        <h2>Create Account</h2> // Component header
-        <form onSubmit={(e) => { e.preventDefault(); handleSubmit('create'); }}> // FIXED: Added proper form submit handler
-            {error && error.username && <p className="error-text">{error.username}</p>} // Username validation error
+    <div className="auth-form">
+        <h2>Create Account</h2>
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit('create'); }}>
+            {error && error.username && <p className="error-text">{error.username}</p>} 
             <input // Username input field
                 type="text" // Standard text type
                 name="username" // Key name
@@ -122,9 +124,9 @@ const CreateAccount = ({ formData, handleInputChange, handleSubmit, passwordHidd
                 value={formData.username} // Controlled value
                 onChange={handleInputChange} // Change listener
                 onBlur={onFocusChange} // Validation trigger on focus loss
-            /> // End input
+            />
             
-            {error && error.email && <p className="error-text">{error.email}</p>} // Email validation error
+            {error && error.email && <p className="error-text">{error.email}</p>} 
             <input // Email input field
                 type="email" // HTML type email
                 name="email" // Key name
@@ -132,10 +134,10 @@ const CreateAccount = ({ formData, handleInputChange, handleSubmit, passwordHidd
                 value={formData.email} // Controlled value
                 onChange={handleInputChange} // Change listener
                 onBlur={onFocusChange} // Focus loss trigger
-            /> // End input
+            />
             
-            {error && error.password && <p className="error-text">{error.password}</p>} // Password validation error
-            <div className="password-wrapper"> // Toggle wrapper
+            {error && error.password && <p className="error-text">{error.password}</p>} 
+            <div className="password-wrapper"> 
                 <input // Password input field
                     type={passwordHidden ? "password" : "text"} // Toggle type
                     name="password" // Key name
@@ -143,18 +145,18 @@ const CreateAccount = ({ formData, handleInputChange, handleSubmit, passwordHidd
                     value={formData.password} // Controlled value
                     onChange={handleInputChange} // Change listener
                     onBlur={onFocusChange} // Focus loss trigger
-                /> // End input
+                />
                 <button // FIXED: Unified password visibility toggle button
                     type="button" // Non-submitting button
                     onClick={() => setPasswordHidden(p => !p)} // Toggle logic
                     className="toggle-btn" // CSS class
                     aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility
-                > // End button start
-                    {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} // Icon logic
-                </button> // End button
-            </div> // End wrapper
+                >
+                    {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} 
+                </button>
+            </div>
             
-            {error && error.cpassword && <p className="error-text">{error.cpassword}</p>} // Match validation error
+            {error && error.cpassword && <p className="error-text">{error.cpassword}</p>}
             <input // Confirm password input
                 type={passwordHidden ? "password" : "text"} // FIXED: Linked to unified visibility state
                 name="cpassword" // Key name
@@ -162,18 +164,19 @@ const CreateAccount = ({ formData, handleInputChange, handleSubmit, passwordHidd
                 value={formData.cpassword} // Controlled value
                 onChange={handleInputChange} // Change listener
                 onBlur={onFocusChange} // Focus loss trigger
-            /> // End input
+            />
             
-            {error && error.foot && <p className="error-text">{error.foot}</p>} // Generic footer error
+            {error && error.foot && <p className="error-text">{error.foot}</p>} 
             <button // Form submission button
                 className="auth-submit-btn" // CSS class
                 type="submit" // Trigger submit
                 disabled={loading} // Disable during request
-            > // End button start
-                {loading ? 'Creating...' : 'Create Account'} // Loading text
-            </button> // End button
-        </form> // End form
-    </div> // End component
+            > 
+                {loading ? 'Creating...' : 'Create Account'} 
+            </button> 
+        </form>
+        <Link to={'auth/login'}>All ready have an account?</Link>
+    </div>
 ); // End CreateAccount
 
 export default function AuthPage() { // Main container component
@@ -233,7 +236,7 @@ export default function AuthPage() { // Main container component
     }; // End submission logic
 
     return ( // Main UI render
-        <div className="auth-container"> // Root flexbox container
+        <div className="auth-container"> 
             {type === 'login' ? ( // Toggle between sub-components
                 <LogIn // Login view
                     formData={formData} // Pass form state
@@ -243,7 +246,7 @@ export default function AuthPage() { // Main container component
                     setPasswordHidden={setPasswordHidden} // Pass visibility setter
                     error={error} // Pass error state
                     loading={loading} // Pass loading state
-                /> // End LogIn
+                />
             ) : ( // Render registration view
                 <CreateAccount // Account creation view
                     formData={formData} // Pass state
@@ -254,8 +257,8 @@ export default function AuthPage() { // Main container component
                     error={error} // Pass errors
                     loading={loading} // Pass status
                     onFocusChange={onFocusChange} // Pass validation trigger
-                /> // End CreateAccount
-            )} // End conditional render
+                />
+            )} 
 
             <style>{`
                 .auth-container { 
@@ -327,7 +330,7 @@ export default function AuthPage() { // Main container component
                 .auth-submit-btn:hover { background: #1d4ed8; }
                 .auth-submit-btn:disabled { background: #93c5fd; cursor: not-allowed; }
             `}</style>
-        </div> // End root
+        </div>
     ); // End return
 } // End AuthPage component
 export const handleServerFetch = async (data = {}, Url = "https://api.example.com", method = "POST") => { // Defines the async fetch wrapper
