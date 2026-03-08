@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 export default function IndexPage() {
-    // Logic to handle hover effects for inline styles
+    
     const [hoveredItem, setHoveredItem] = useState(null);
     const conn = useConnection();
     const signIn = conn.signIn || false;
@@ -133,22 +133,26 @@ export default function IndexPage() {
     return (
         <div style={styles.page}>
             {/* Header */}
-            <header style={styles.header}>
-                <nav style={styles.nav}>
-                    <Link to="/" style={styles.logo}>
-                        <BookOpen color="#4f46e5" size={28} />
-                        <span>ScriptureSync</span>
-                    </Link>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                        <Link to="/auth/login" style={{ color: '#4b5563', textDecoration: 'none', fontWeight: 500 }}>Sign In</Link>
-                        <Link to="/auth/signup" style={{ ...styles.btnPrimary, padding: '0.6rem 1.5rem', fontSize: '1rem' }}>Create Account</Link>
-                    </div>
-                </nav>
+            <header style={styles.header}> 
+    <nav style={styles.nav}> 
+        <Link to="/" style={styles.logo}> 
+            <BookOpen color="#4f46e5" size={28} /> 
+            <span>ScriptureSync</span> 
+        </Link> 
+        <div style={styles.authActions}> 
+            <Link to="/auth/login" style={styles.btnSecondary}> 
+                Sign In 
+            </Link> 
+            <Link to="/auth/signup" style={styles.btnPrimary}> 
+                Create Account 
+            </Link> 
+        </div> 
+    </nav> 
             </header>
 
             {/* Hero Section */}
             <section style={styles.hero}>
-                <h1 style={styles.heroTitle}>Master the Word. <br /><span style={{ color: '#facc15' }}>Win the Race.</span></h1>
+                <h1 style={styles.heroTitle}>Master the Word. <br /><span style={{ color: '#facc15' }}>Build Your Skill</span></h1>
                 <p style={styles.heroSubtitle}>
                     The comprehensive tool for Bible Quizzing. Study solo, challenge our high-speed bots, or compete with your team in real-time.
                 </p>
@@ -251,3 +255,67 @@ export default function IndexPage() {
         </div>
     );
 }
+const styles = { // Root styles object
+    header: { // Header container styles
+        display: 'flex', // Enable flexbox
+        justifyContent: 'center', // Center the nav within the header
+        width: '100%', // Take full width of the viewport
+        backgroundColor: '#ffffff', // White background
+        borderBottom: '0.0625rem solid #e5e7eb', // Subtle bottom border in rem
+        minHeight: '4.5rem' // Use px/rem for absolute minimum height
+    }, // End header style
+    nav: { // Navigation layout styles
+        display: 'flex', // Enable flexbox for nav items
+        alignItems: 'center', // Vertically center logo and buttons
+        justifyContent: 'space-between', // Push logo and actions to edges
+        flexWrap: 'wrap', // Allow items to wrap to prevent cutoff on mobile
+        width: '95%', // Use percentage for horizontal space
+        maxWidth: '80rem', // Limit width on large screens using rem
+        padding: '0.5rem 0', // Vertical padding in rem
+        gap: '1rem' // Space between wrapped items in rem
+    }, // End nav style
+    logo: { // Branding styles
+        display: 'flex', // Align icon and text horizontally
+        alignItems: 'center', // Center icon with text
+        gap: '0.5rem', // Space between icon and text in rem
+        textDecoration: 'none', // Remove default link underline
+        color: '#111827', // Dark gray for logo text
+        fontWeight: 700, // Bold font weight
+        fontSize: '1.25rem', // Text size in rem
+        flexGrow: 0 // Prevent logo from stretching
+    }, // End logo style
+    authActions: { // Container for buttons
+        display: 'flex', // Flex layout for button row
+        alignItems: 'center', // Vertically align buttons
+        gap: '0.75rem', // Responsive spacing in rem
+        flexGrow: 1, // Allow container to occupy available space
+        justifyContent: 'flex-end', // Align buttons to the right
+        minWidth: '15rem' // Ensure buttons have enough space before wrapping
+    }, // End actions style
+    btnPrimary: { // Main action button
+        backgroundColor: '#4f46e5', // Indigo background
+        color: '#ffffff', // White text
+        padding: '0.6rem 1.2rem', // Scalable padding in rem
+        borderRadius: '0.5rem', // Rounded corners in rem
+        textDecoration: 'none', // Remove underline
+        fontWeight: 500, // Medium weight
+        fontSize: '0.9rem', // Responsive font size
+        whiteSpace: 'nowrap', // Prevent text from splitting into two lines
+        textAlign: 'center', // Center text for wrapped layouts
+        flexGrow: 0 // Keep button size compact
+    }, // End btnPrimary
+    btnSecondary: { // The updated Sign In button style
+        color: 'black', // Indigo text
+        backgroundColor: 'transparent', // Clear background
+        padding: '0.6rem 1.2rem', // Consistent padding with primary button
+        borderRadius: '0.5rem', // Matching corner radius
+        border: '0.1rem solid #4f46e5', // Outline in rem
+        textDecoration: 'none', // Remove underline
+        fontWeight: 500, // Medium weight
+        fontSize: '0.9rem', // Matching font size
+        whiteSpace: 'nowrap', // Prevent text cutoff
+        textAlign: 'center', // Center text
+        transition: 'background-color 0.2s', // Smooth interaction transition
+        flexGrow: 0 // Keep button size compact
+    } // End btnSecondary
+}; // End styles object

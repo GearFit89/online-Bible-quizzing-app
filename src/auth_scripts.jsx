@@ -1,110 +1,335 @@
 
-import { EyeClosed, LucideEye } from 'lucide-react';
-import React, {useState, useEffect} from 'react'
-import { useParams, useLocation , useNavigate} from 'react-router-dom';
-// Base URL for the create account endpoint
-import { BASE_URL } from './config.js'
-const createUrl = BASE_URL +'/createAccount'; ////  Defines the API endpoint for account creation
-// Base URL for the login endpoint (if implemented)
-const loginUrl = BASE_URL +'/login'; // Defines the API endpoint for user login
+import { EyeClosed, LucideEye } from 'lucide-react'; // Import icons for password visibility
+import React, {useState, useEffect} from 'react' // Import standard React hooks
+import { useParams, useLocation , useNavigate} from 'react-router-dom'; // Import router hooks for navigation
+import { BASE_URL } from './config.js' // Import the base API configuration
 
+const createUrl = BASE_URL +'/createAccount'; // Define the account creation endpoint
+const loginUrl = BASE_URL +'/login'; // Define the user login endpoint
 
-/// for dealing page reloads aby sending rediect from 
-// Diagnostic Log: This executes immediately when the script loads, confirming successful file linking.
-console.log('--- auth_scripts.js loaded successfully ---'); // Confirms the script file is loaded and running.
-const errorMeanings = {
-    '1': { message: 'Password must be at least 6 characters long', field: 'password' }, // Error: Length
-    '2': { message: 'Password must contain uppercase, number, and symbol', field: 'password' }, // Error: Complexity
-    '3': { message: 'Username must be at most 25 characters long', field: 'username' }, // Error: Length
-    '4': { message: 'Please enter a valid email address', field: 'email' }, // Error: Format
-    '5': { message: 'Passwords do not match', field: 'cpassword' }, // Error: Mismatch
-    '6': { message: 'Username is already taken', field: 'username' }, // Auth: Taken
-    '7': { message: 'Authentication service error during sign-up', field: 'foot' }, // Auth: Service
-    '8': { message: 'Database error while saving new user', field: 'foot' }, // DB: User save
-    '9': { message: 'Failed to save username to profile', field: 'username' }, // DB: Profile save
-    '10': { message: 'General database error with user profile', field: 'foot' }, // DB: General
-    '11': { message: 'Invalid email or password', field: 'foot' }, // Login: Credentials
-    '12': { message: 'Server error during login process', field: 'foot' }, // Login: Server
-    '13': { message: 'Username retrieval error during login', field: 'username' }, // Login: Retrieval
-    '15': { message: 'Email field is required', field: 'email' }, // Empty: Email
-    '16': { message: 'Username field is required', field: 'username' }, // Empty: Username
-    '17': { message: 'Password field is required', field: 'password' }, // Empty: Password
-    '18': { message: 'Please confirm your password', field: 'cpassword' }, // Empty: Confirmation
-    '19': { message: 'All fields are required', field: 'foot' }, // Empty: General
-    '20': { message: 'Account data object is missing', field: 'foot' }, // System: Data missing,
-    '21:':{message:'Failed to find server', field: 'foot' }
-};
-// Elements for Create Account page
+const errorMeanings = { // Map error codes to specific fields and messages
+    '1': { message: 'Password must be at least 6 characters long', field: 'password' }, // Error code 1
+    '2': { message: 'Password must contain uppercase, number, and symbol', field: 'password' }, // Error code 2
+    '3': { message: 'Username must be at most 25 characters long', field: 'username' }, // Error code 3
+    '4': { message: 'Please enter a valid email address', field: 'email' }, // Error code 4
+    '5': { message: 'Passwords do not match', field: 'cpassword' }, // Error code 5
+    '6': { message: 'Username is already taken', field: 'username' }, // Error code 6
+    '7': { message: 'Authentication service error during sign-up', field: 'foot' }, // Error code 7
+    '8': { message: 'Database error while saving new user', field: 'foot' }, // Error code 8
+    '9': { message: 'Failed to save username to profile', field: 'username' }, // Error code 9
+    '10': { message: 'General database error with user profile', field: 'foot' }, // Error code 10
+    '11': { message: 'Invalid email or password', field: 'foot' }, // Error code 11
+    '12': { message: 'Server error during login process', field: 'foot' }, // Error code 12
+    '13': { message: 'Username retrieval error during login', field: 'username' }, // Error code 13
+    '15': { message: 'Email field is required', field: 'email' }, // Error code 15
+    '16': { message: 'Username field is required', field: 'username' }, // Error code 16
+    '17': { message: 'Password field is required', field: 'password' }, // Error code 17
+    '18': { message: 'Please confirm your password', field: 'cpassword' }, // Error code 18
+    '19': { message: 'All fields are required', field: 'foot' }, // Error code 19
+    '20': { message: 'Account data object is missing', field: 'foot' }, // Error code 20
+    '21': { message: 'Failed to find server', field: 'foot' } // FIXED: Removed the extra colon from the key '21'
+}; // End of errorMeanings object
 
-// --- UTILITY FUNCTIONS ---
+function validateAccountInfoFrontEnd(accountData) { // Function to validate inputs before submission
+    let errors = [] // Initialize a list to hold error codes
+    if (!accountData) { // Check if data is missing entirely
+        errors.push('20') // Push system error code
+    } // End check
 
-// Function to display foot errors using the dedicated display element (prevents refresh)
-/**
- * Validates account info on the frontend.
- * @param {Object} accountData - The user data ({email, password, username})
- * @returns {string|null} - Returns the error code string or null if valid.
- */
-/**
- * Validates account info on the frontend.
- * @param {Object} accountData - The user data ({email, password, username, cpassword})
- * @returns {string|null} - Returns the error code string or null if valid.
- */
-function validateAccountInfoFrontEnd(accountData) {
-    // 0. Check if accountData exists
-    let errors = []
-    if (!accountData) { 
-        errors.push('20') // Error: No data provided
-    }
+    const { email, password, username, cpassword } = accountData; // Destructure form fields
 
-    const { email, password, username, cpassword } = accountData; // Destructure input data
+    if (!email) errors.push('15') // Check for empty email
+    if (!username) errors.push('16') // Check for empty username
+    if (!password) errors.push('17') // Check for empty password
+    if (!cpassword) errors.push('18'); // Check for empty confirmation
 
-    // 1. Check for empty fields (Existence checks)
-    if (!email) errors.push('15') // Error: Email missing
-    if (!username) errors.push('16') // Error: Username missing
-    if (!password) errors.push('17') // Error: Password missing
-    if (!cpassword) errors.push('18'); // Error: Password confirmation missing
+    if (password !== cpassword) { // Check if passwords match
+        errors.push('5') // Push mismatch code
+    } // End check
 
-    // 2. Check Password Match
-    if (password !== cpassword) {
-        errors.push('5') // Error: Passwords do not match
-    }
+    if (password.length < 6) { // Check minimum password length
+        errors.push('1') // Push length code
+    } // End check
 
-    // 3. Check Password Length
-    if (password.length < 6) {
-        errors.push('1') // Error: Password too short
-    }
+    const passwRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\-]).{6,40}$/; // Complexity pattern
+    if (!passwRegex.test(password)) { // Check regex pattern
+        errors.push('2') // Push complexity code
+    } // End check
 
-    // 4. Check Password Complexity
-    const passwRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\-]).{6,40}$/;
-    if (!passwRegex.test(password)) {
-        errors.push('2') // Error: Complexity requirements not met
-    }
+    if (username.length > 25) { // Check maximum username length
+        errors.push('3') // Push username length code
+    } // End check
 
-    // 5. Check Username Length
-    if (username.length > 25) {
-        errors.push('3') // Error: Username too long
-    }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Email format pattern
+    if (!emailRegex.test(email)) { // Check email format
+        errors.push('4'); // Push format error code
+    } // End check
 
-    // 6. Check Email Format
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
-        errors.push('4'); // Error: Invalid email format
-    }
+    return errors // Return found error codes
+} // End function
 
-    //errors.push('-1'); // Return -1: All validations passed
-    return errors
-}
+const LogIn = ({ formData, handleInputChange, handleSubmit, setPasswordHidden, error, loading, passwordHidden }) => ( // Sub-component for login view
+    <div className="auth-form"> // Form wrapper div
+        <h2>Log In</h2> // Component header
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit('login'); }}> // FIXED: Wrapped inputs in form and added submit handler
+            <input // Email input field
+                type="email" // HTML type email
+                name="email" // Key name for state
+                placeholder="Email" // Placeholder text
+                value={formData.email} // Controlled value
+                onChange={handleInputChange} // Change listener
+            /> // End input
+            
+            <div className="password-wrapper"> // Wrapper for toggle alignment
+                <input // Password input field
+                    type={passwordHidden ? "password" : "text"} // Conditional type toggle
+                    name="password" // Key name
+                    placeholder="Password" // Placeholder
+                    value={formData.password} // Controlled value
+                    onChange={handleInputChange} // Change listener
+                /> // End input
+                <button // Visibility toggle button
+                    type="button" // Prevent form submission
+                    onClick={() => setPasswordHidden(p => !p)} // Toggle boolean state
+                    className="toggle-btn" // CSS class
+                    aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility
+                > // End button start
+                    {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} // Render toggle icon
+                </button> // End toggle button
+            </div> // End wrapper
+            
+            {error && error.foot && <p className="error-text">{error.foot}</p>} // Show generic error message
+            <button // Login submit button
+                className="auth-submit-btn" // CSS class
+                type="submit" // Trigger form onSubmit
+                disabled={loading} // Prevent double clicks
+            > // End button start
+                {loading ? 'Logging in...' : 'Log In'} // Loading state text
+            </button> // End submit button
+        </form> // End form
+    </div> // End component
+); // End LogIn
 
-// Function to clear any custom validation messages set by the browser and the foot server error
+const CreateAccount = ({ formData, handleInputChange, handleSubmit, passwordHidden, setPasswordHidden, error, loading, onFocusChange }) => ( // Sub-component for account creation
+    <div className="auth-form"> // Form wrapper div
+        <h2>Create Account</h2> // Component header
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit('create'); }}> // FIXED: Added proper form submit handler
+            {error && error.username && <p className="error-text">{error.username}</p>} // Username validation error
+            <input // Username input field
+                type="text" // Standard text type
+                name="username" // Key name
+                placeholder="Username" // Placeholder
+                value={formData.username} // Controlled value
+                onChange={handleInputChange} // Change listener
+                onBlur={onFocusChange} // Validation trigger on focus loss
+            /> // End input
+            
+            {error && error.email && <p className="error-text">{error.email}</p>} // Email validation error
+            <input // Email input field
+                type="email" // HTML type email
+                name="email" // Key name
+                placeholder="Email" // Placeholder
+                value={formData.email} // Controlled value
+                onChange={handleInputChange} // Change listener
+                onBlur={onFocusChange} // Focus loss trigger
+            /> // End input
+            
+            {error && error.password && <p className="error-text">{error.password}</p>} // Password validation error
+            <div className="password-wrapper"> // Toggle wrapper
+                <input // Password input field
+                    type={passwordHidden ? "password" : "text"} // Toggle type
+                    name="password" // Key name
+                    placeholder="Password" // Placeholder
+                    value={formData.password} // Controlled value
+                    onChange={handleInputChange} // Change listener
+                    onBlur={onFocusChange} // Focus loss trigger
+                /> // End input
+                <button // FIXED: Unified password visibility toggle button
+                    type="button" // Non-submitting button
+                    onClick={() => setPasswordHidden(p => !p)} // Toggle logic
+                    className="toggle-btn" // CSS class
+                    aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility
+                > // End button start
+                    {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} // Icon logic
+                </button> // End button
+            </div> // End wrapper
+            
+            {error && error.cpassword && <p className="error-text">{error.cpassword}</p>} // Match validation error
+            <input // Confirm password input
+                type={passwordHidden ? "password" : "text"} // FIXED: Linked to unified visibility state
+                name="cpassword" // Key name
+                placeholder="Confirm Password" // FIXED: Corrected spelling of "Confirm"
+                value={formData.cpassword} // Controlled value
+                onChange={handleInputChange} // Change listener
+                onBlur={onFocusChange} // Focus loss trigger
+            /> // End input
+            
+            {error && error.foot && <p className="error-text">{error.foot}</p>} // Generic footer error
+            <button // Form submission button
+                className="auth-submit-btn" // CSS class
+                type="submit" // Trigger submit
+                disabled={loading} // Disable during request
+            > // End button start
+                {loading ? 'Creating...' : 'Create Account'} // Loading text
+            </button> // End button
+        </form> // End form
+    </div> // End component
+); // End CreateAccount
 
+export default function AuthPage() { // Main container component
+    const [passwordHidden, setPasswordHidden] = useState(true); // visibility toggle state
+    const navigate = useNavigate(); // FIXED: Corrected variable name from navagate
+    const { inittype } = useParams(); // Extract initial mode from route
+    const [type, setType] = useState(inittype || 'login'); // Active auth mode state
+    const [loading, setLoading] = useState(false); // Async request state
+    const [error, setError] = useState({ foot: '', username: '', email: '', password: '', cpassword: '' }); // Field errors
+    const [formData, setFormData] = useState({ username: '', email: '', password: '', cpassword: '' }); // Input data
+    const location = useLocation(); // Location hook for route changes
 
-// Function to show the success message element temporarily
+    useEffect(() => { // Sync state with route parameters
+        if (inittype) setType(inittype); // Update local state if URL changes
+    }, [location, inittype]); // Re-run effect on route change
 
-// Function to toggle password visibility
+    const handleInputChange = (e) => { // Generic input listener
+        const { name, value } = e.target; // Destructure target
+        setError(prev => ({ ...prev, [name]: '' })); // Clear error for modified field
+        setFormData(prev => ({ ...prev, [name]: value })); // Update form state
+    }; // End handler
 
+    const onFocusChange = (e) => { // Validation check on field blur
+        const codes = validateAccountInfoFrontEnd(formData); // Execute validation
+        setError({ foot: '', username: '', email: '', password: '', cpassword: '' }); // Clear existing errors
+        for (let code of codes) { // Iterate through found error codes
+            const field = errorMeanings[code].field; // Identify target UI field
+            setError(prev => ({ ...prev, [field]: errorMeanings[code].message })); // Update field error
+        } // End loop
+    }; // End handler
 
-// --- CREATE ACCOUNT LOGIC ---
- // Function to handle the account creation process
+    const handleSubmit = async (actionType) => { // Logic to send data to backend
+        setError(prev => ({ ...prev, foot: '' })); // Reset generic error
+        setLoading(true); // Begin loading
+        const url = actionType === 'create' ? createUrl : loginUrl; // Select endpoint
+        try { // Start network attempt
+            const response = await fetch(url, { // Execute fetch call
+                method: 'POST', // HTTP POST
+                headers: { 'Content-Type': 'application/json' }, // Content header
+                credentials: 'include', // Include session cookies
+                body: JSON.stringify(formData) // Serialize payload
+            }); // End fetch
+            const data = await response.json(); // Parse response data
+            if (!response.ok) { // Check for server-side failures
+                const code = data.errorCode || '12'; // Fallback to general server error
+                const field = errorMeanings[code]?.field || 'foot'; // Find field mapping
+                const message = errorMeanings[code]?.message || 'An unexpected error occurred'; // Find message
+                setError(prev => ({ ...prev, [field]: message })); // Display error in UI
+                return; // Stop execution
+            } // End failure check
+            window.location.href = '/dashboard/profile'; // Redirect to user profile on success
+        } catch (err) { // Handle network timeouts or failures
+            setError(prev => ({ ...prev, foot: errorMeanings['21']?.message || 'Cannot reach server' })); // Show network error
+        } finally { // Clean up
+            setLoading(false); // Stop loading animation
+        } // End try-catch-finally
+    }; // End submission logic
+
+    return ( // Main UI render
+        <div className="auth-container"> // Root flexbox container
+            {type === 'login' ? ( // Toggle between sub-components
+                <LogIn // Login view
+                    formData={formData} // Pass form state
+                    handleInputChange={handleInputChange} // Pass change logic
+                    handleSubmit={handleSubmit} // Pass submit logic
+                    passwordHidden={passwordHidden} // Pass visibility state
+                    setPasswordHidden={setPasswordHidden} // Pass visibility setter
+                    error={error} // Pass error state
+                    loading={loading} // Pass loading state
+                /> // End LogIn
+            ) : ( // Render registration view
+                <CreateAccount // Account creation view
+                    formData={formData} // Pass state
+                    handleInputChange={handleInputChange} // Pass logic
+                    handleSubmit={handleSubmit} // Pass logic
+                    passwordHidden={passwordHidden} // Pass visibility
+                    setPasswordHidden={setPasswordHidden} // Pass setter
+                    error={error} // Pass errors
+                    loading={loading} // Pass status
+                    onFocusChange={onFocusChange} // Pass validation trigger
+                /> // End CreateAccount
+            )} // End conditional render
+
+            <style>{`
+                .auth-container { 
+                    display: flex; /* Establish flex context */
+                    flex-direction: column; /* Stack components vertically */
+                    flex-grow: 1; /* Expand to fill available space */
+                    width: 90%; /* Responsive mobile-first width */
+                    max-width: 28rem; /* FIXED: Limits width on desktop using rem */
+                    margin: 2rem auto; /* Center with rem margins */
+                    padding: 2.5rem; /* rem padding for scaling */
+                    background: white; /* Clean background */
+                    border-radius: 0.75rem; /* rem-based corners */
+                    box-shadow: 0 0.625rem 1.5rem -0.3rem rgba(0, 0, 0, 0.1); /* rem-based shadows */
+                    min-height: 25rem; /* FIXED: Use px or rem for min height */
+                }
+                .auth-form h2 {
+                    margin-top: 0;
+                    color: #1e3a8a;
+                    font-size: 1.875rem;
+                    font-weight: 700;
+                    text-align: center;
+                    margin-bottom: 1.5rem;
+                }
+                .auth-form input { 
+                    display: flex; /* Flex context for inputs */
+                    width: 100%; /* Fill container width */
+                    margin-bottom: 0.25rem; /* Spacing in rem */
+                    padding: 0.75rem 1rem; /* Internal padding in rem */
+                    border: 0.0625rem solid #d1d5db; /* rem border thickness */
+                    border-radius: 0.375rem; /* rem border radius */
+                    font-size: 1rem; /* font in rem */
+                }
+                .password-wrapper {
+                    display: flex; /* Use flexbox for input and button alignment */
+                    position: relative; /* Context for absolute positioning */
+                    align-items: center; /* Center items vertically */
+                    width: 100%; /* Full width */
+                }
+                .toggle-btn {
+                    position: absolute; /* Place on top of input */
+                    right: 0.5rem; /* Position from right in rem */
+                    background: none; /* Transparent background */
+                    border: none; /* No border */
+                    cursor: pointer; /* Interaction feedback */
+                    display: flex; /* Flex for icon centering */
+                    align-items: center; /* Icon alignment */
+                }
+                .error-text { 
+                    color: #dc2626; 
+                    font-size: 0.75rem; /* Size in rem */
+                    margin-bottom: 1rem; /* Bottom margin in rem */
+                    font-weight: 500;
+                }
+                .auth-submit-btn { 
+                    display: flex; /* Flex for button sizing */
+                    justify-content: center; /* Center text */
+                    width: 100%; /* Full width */
+                    padding: 0.875rem; /* rem padding */
+                    background: #2563eb; /* Primary color */
+                    color: white; /* Contrast text */
+                    border: none; /* Reset border */
+                    border-radius: 0.375rem; /* rem radius */
+                    cursor: pointer; /* User feedback */
+                    font-weight: 600; /* Bold text */
+                    font-size: 1rem; /* font in rem */
+                    margin-top: 1rem; /* Top margin in rem */
+                    flex-grow: 0; /* Prevent vertical stretching */
+                }
+                .auth-submit-btn:hover { background: #1d4ed8; }
+                .auth-submit-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+            `}</style>
+        </div> // End root
+    ); // End return
+} // End AuthPage component
 export const handleServerFetch = async (data = {}, Url = "https://api.example.com", method = "POST") => { // Defines the async fetch wrapper
     
     console.log('--- Account Submission Attempt ---'); // Logs the start of the submission process
@@ -130,315 +355,4 @@ export const handleServerFetch = async (data = {}, Url = "https://api.example.co
         console.error('Fetch or network error (Promise rejected):', error); // Logs the actual error object
         return { error: error }; // Returns the error for the caller to handle
     } // Closes the catch block
-}; // Closes the function
-// i am working on this it will not be used now 
-function AuthItem({item={}, auth={}, errors={}, type}){
-    return (
-        <div className='auth-item'>
-        <h3 > {item.name}</h3>
-        <input name={item.name} value={auth[item.name]} type={item.type} />
-       <div className='error-item' >{errors[item.name]} </div>
-        </div>
-    )
-}
-
-// SVG Icon for the "Hide" (eye with slash) state
-const HideIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="eye-closed">
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-        <line x1="1" y1="1" x2="23" y2="23"></line>
-    </svg>
-); // Defines the visual representation of hidden data
-
-// SVG Icon for the "Show" (open eye) state
-const ShowIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="eye-open">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-        <circle cx="12" cy="12" r="3"></circle>
-    </svg>
-); // Defines the visual representation of visible data
-
-
-
-
-
-// --- NEW COMPONENT: LogIn ---
-const LogIn = ({ formData, handleInputChange, handleSubmit,setPasswordHidden, error, loading,passwordHidden }) => (
-    <div className="auth-form">
-        <h2>Log In</h2>
-        <form>
-        <input 
-            type="email" 
-            name="email" 
-            placeholder="Email" 
-            value={formData.email} 
-            onChange={handleInputChange} 
-        />
-        
-        <input 
-                type={passwordHidden ? "password" : "text"}  
-            name="password" 
-            placeholder="Password" 
-            value={formData.password} 
-            onChange={handleInputChange} 
-            />
-            <button
-                onClick={() => setPasswordHidden(p => !p)} // Toggles the boolean state of passwordHidden
-                style={buttonStyle} // Applies flexible, rem-based styling
-                aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility for screen readers
-            >
-                {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} {/* Renders icon based on state using rem for sizing */}
-            </button> </form>
-        {error && <p className="error-text">{error.foot}</p>}
-        <button 
-            className="auth-submit-btn" 
-            onClick={(e)=>{e.preventDefault();  handleSubmit('logIn')}}
-            disabled={loading}
-        >
-            {loading ? 'Logging in...' : 'Log In'}
-        </button>
-    </div>
-);
-
-// --- NEW COMPONENT: CreateAccount ---
-const CreateAccount = ({ formData, handleInputChange, handleSubmit,passwordHidden,setPasswordHidden, error, loading , onFocusChange}) => (
-    <div className="auth-form">
-        <form>
-        <h2>Create Account</h2>
-         {error && <p className="error-text">{error.username}</p>}
-        <input 
-            type="text" 
-            name="username" 
-            placeholder="Username" 
-            value={formData.username} 
-            onChange={handleInputChange} 
-            onBlur={onFocusChange}
-        />
-          {error && <p className="error-text">{error.email}</p>}
-        <input 
-            type="email" 
-            name="email" 
-            placeholder="Email" 
-            value={formData.email} 
-            onChange={handleInputChange} 
-             onBlur={onFocusChange}
-        />
-       {error && <p className="error-text">{error.password}</p>}
-        <input 
-                type={passwordHidden ? "password" : "text"} 
-            name="password" 
-            placeholder="Password" 
-            value={formData.password} 
-            onChange={handleInputChange} 
-             onBlur={onFocusChange}
-            />
-            <button
-                onClick={() => setPasswordHidden(p => !p)} // Toggles the boolean state of passwordHidden
-                style={buttonStyle} // Applies flexible, rem-based styling
-                aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility for screen readers
-            >
-                {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} {/* Renders icon based on state using rem for sizing */}
-            </button>
-         {error && <p className="error-text">{error.cpassword}</p>}
-          <input 
-            type={passwordHidden ? "password":"text"} 
-            name="cpassword" 
-            placeholder="Confrim Password" 
-            value={formData.cpassword} 
-            onChange={handleInputChange} 
-             onBlur={onFocusChange}
-            /><button onClick={() => setPasswordHidden(p => !p)} >{passwordHidden ? <LucideEye /> :<EyeClosed/>}</button>
-        </form>
-        {error && <p className="error-text">{error.foot}</p>}
-        
-        <button
-            onClick={() => setPasswordHidden(p => !p)} // Toggles the boolean state of passwordHidden
-            style={buttonStyle} // Applies flexible, rem-based styling
-            aria-label={passwordHidden ? "Show password" : "Hide password"} // Accessibility for screen readers
-        >
-            {passwordHidden ? <LucideEye size="1.2rem" /> : <EyeClosed size="1.2rem" />} {/* Renders icon based on state using rem for sizing */}
-        </button><button 
-            className="auth-submit-btn" 
-            onClick={(e) =>{e.preventDefault(); handleSubmit('create')}}
-            disabled={loading}
-        >
-            {loading ? 'Creating...' : 'Create Account'}
-        </button>
-    </div>
-);
-
-// --- MAIN PARENT COMPONENT ---
-export default function AuthPage() {
-    const [passwordHidden, setPasswordHidden] = useState(true); // State to toggle password visibility
-    const navagate = useNavigate();
-    let  { inittype } = useParams();
-    const [type, setType] = useState(inittype)// 'logIn' or 'create'
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState({
-        foot:'',
-         username: '', 
-        email: '',
-        password: '',
-        cpassword:''
-    });
-    const [formData, setFormData] = useState({
-        username: '', 
-        email: '',
-        password: '',
-        cpassword:''
-    });
-    ///console.log(inittype, 'inittype')
-
-    const handleInputChange = (e) => {
-       
-        const { name, value } = e.target;
-         setError(prev=>({...prev, [name]:'' }));// resets the error when entering
-         setFormData(prev => ({ ...prev, [name]: value }));
-        
-        
-    };
-    function onFocusChange({target}){
-        const {name } = target;
-        setError({
-        username: '', 
-        email: '',
-        password: '',
-        cpassword:''
-    })
-              const codes  = validateAccountInfoFrontEnd(formData);
-       
-        for (let code of codes){
-        setError((prev) =>({...prev, [errorMeanings[code].field]:errorMeanings[code].message}))
-        }
-         console.log('code', codes, name, formData, 'feild.', error)
-    }
-    const location = useLocation()
-    useEffect(()=>{
-        
-        setType(inittype)}, [location])
-    
-
-    const handleSubmit = async (actionType) => {
-    setError(prev=>({
-      ...prev,
-      foot:''
-    }))
-   // if(Object.values(error).some(e=>e !==  '')){return}
-        setLoading(true);
-        
-        const url = actionType === 'create' ? createUrl : loginUrl;
-        let errorCode = '21'
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(formData)
-            });
-            const data = await response.json();
-            console.log(data, 'data for auth');
-          
-            if (!response.ok) {
-                // Use the specific error code from server or default to '12' (Server Error)
-                const code = data.errorCode || '12';
-                const field = errorMeanings[code]?.field || 'foot';
-                const message = errorMeanings[code]?.message || 'An unexpected error occurred';
-
-                setError(prev => ({ ...prev, [field]: message }));
-                return; // Stop execution
-            }
-
-            // Success: Redirect
-            window.location.href = '/dashboard/profile';
-        } catch (err) {
-            // Handle network/timeout errors
-            setError(prev => ({ ...prev, foot: errorMeanings['21']?.message || 'Cannot reach server' }));
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="auth-container">
-            {/* Professional Way: Clear conditional rendering instead of inline ternary */}
-            {type === 'login' ? (
-                <LogIn 
-                    formData={formData} 
-                    handleInputChange={handleInputChange} 
-                    handleSubmit={handleSubmit}
-                    passwordHidden={passwordHidden}
-                    setPasswordHidden={setPasswordHidden}
-                    error={error}
-                    loading={loading}
-                />
-            ) : (
-                <CreateAccount 
-                    formData={formData} 
-                    handleInputChange={handleInputChange} 
-                    handleSubmit={handleSubmit}
-                    passwordHidden={passwordHidden}
-                    error={error}
-                    setPasswordHidden={setPasswordHidden}
-                    loading={loading}
-                    onFocusChange={onFocusChange}
-                />
-            )}
-
-            <style>{`
-    .auth-container { 
-        width: 90%; 
-        max-width: 450px; /* Limits size on desktop */
-        margin: auto; 
-        padding: 2.5rem; 
-        background: white;
-        border-radius: 12px; 
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    }
-    .auth-form h2 {
-        margin-top: 0;
-        color: #1e3a8a;
-        font-size: 1.875rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-    .auth-form input { 
-        width: 100%; 
-        margin-bottom: 0.25rem; 
-        padding: 0.75rem 1rem; 
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        font-size: 1rem;
-        transition: border-color 0.2s;
-    }
-    .auth-form input:focus {
-        outline: none;
-        border-color: #2563eb;
-        ring: 2px #bfdbfe;
-    }
-    .error-text { 
-        color: #dc2626; 
-        font-size: 0.75rem; 
-        margin-bottom: 1rem;
-        margin-top: 0.1rem;
-        font-weight: 500;
-    }
-    .auth-submit-btn { 
-        width: 100%; 
-        padding: 0.875rem; 
-        background: #2563eb; 
-        color: white; 
-        border: none; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-size: 1rem;
-        margin-top: 1rem;
-        transition: background 0.2s;
-    }
-    .auth-submit-btn:hover { background: #1d4ed8; }
-    .auth-submit-btn:disabled { background: #93c5fd; cursor: not-allowed; }
-`}</style>
-        </div>
-    );
-}
+};

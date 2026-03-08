@@ -20,14 +20,14 @@ import { Profile } from './routes/Profile.jsx';
 import { useState, useEffect } from 'react';
 import { StatusOutputBox } from './status.jsx'
 import IndexPage from './routes/IndexPage.jsx'
-import { AdvancedSettings } from './settings.jsx';
-// Base URL for API endpoints
+import { AdvancedSettings } from './settings.jsx'
 const settings = ()=>{
   return (<div>
     <h1>Settings Page</h1>
     <p>Settings content goes here.</p>
   </div>    )
 }
+
 // Refactored from an object to an array of objects for better scalability
 export const routes = [
   { 

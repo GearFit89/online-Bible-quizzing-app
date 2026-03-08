@@ -1678,7 +1678,7 @@ export default function QuizApp(){
         const [params] = useSearchParams();
         const [hasStarted, setSart] = useState(false)
         const rawConfig = params.get('config');
-        const [initalScore, setinitScore] = useState({})
+        const [initalScore, setinitScore] = useState({[profileData?.username || '']:0})
         const [isTeamMode, setIsTeamMode] = useState(false);
         const [timerSettings, setTimerSettings] = useState({  isTimerRuning: false });  
    const userConfig = quizData.userConfig || {};

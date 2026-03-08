@@ -208,7 +208,7 @@ export default function DebugConsole() {
     // --- UI HELPERS ---
     const currentStateUI = CONNECTION_UI[serverstate] || { label: 'Unknown', color: '#999' };
     const uniqueUserCount = Object.keys(usersMap).length;
-
+    if(!isDevMode) return null;
     if (!isOpen) {
         return (
             <button onClick={() => setIsOpen(true)} style={styles.openBtn}>
